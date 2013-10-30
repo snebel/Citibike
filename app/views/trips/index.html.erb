@@ -1,0 +1,16 @@
+<table>
+  <tr>
+  	<td>Origin</td>
+  	<td>Destination</td>
+    <td>Origin Lat</td>
+    <td>Origin Long</td>
+  </tr>
+  <% @trips.each do |trip| %>
+  <tr>
+    <td><%= trip.origin %></td>
+    <td><%= trip.destination %></td>
+    <td><%= trip.origin_lat %></td>
+    <td><%= trip.origin_long %></td>
+  </tr>
+<% end %>
+</table>

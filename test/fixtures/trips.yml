@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  origin: MyString
+  destination: MyString
+  origin_lat: 1.5
+  origin_long: 1.5
+  destination_lat: 1.5
+  destination_long: 1.5
+  origin_closest_station_lat: 1.5
+  origin_closest_station_long: 1.5
+  dest_closest_station_lat: 1.5
+  dest_closest_station_long: 1.5
+
+two:
+  origin: MyString
+  destination: MyString
+  origin_lat: 1.5
+  origin_long: 1.5
+  destination_lat: 1.5
+  destination_long: 1.5
+  origin_closest_station_lat: 1.5
+  origin_closest_station_long: 1.5
+  dest_closest_station_lat: 1.5
+  dest_closest_station_long: 1.5

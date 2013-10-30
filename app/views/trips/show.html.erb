@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <!--
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; text-align: center;padding: 0 }
+      #map-canvas { 
+        height: 100%;
+      }
+    </style>
+	-->
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUxuJVuvsR7Fy6J5ZBThZ4zAX79mrFGbI&sensor=true">
+    </script>
+
+    <script type="text/javascript">
+      var directionsDisplay;
+      var directionsService = new google.maps.DirectionsService();
+      var map;
+
+      function initialize() {
+        directionsDisplay = new google.maps.DirectionsRenderer();
+        
+        var mapOptions = {
+          center: new google.maps.LatLng(40.741, -73.9898),
+          zoom: 14,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+          };
+
+        map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
+        directionsDisplay.setMap(map);
+
+        function addMarker(lat, lng, status) {
+          var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(lat, lng),
+            map: map
+            });
+
+          var infowindow = new google.maps.InfoWindow({
+            content: status
+          });
+
+          google.maps.event.addListener(marker, 'click', function(){ infowindow.open(map, marker); });
+        }        
+      }
+      
+      function calcRoute() {
+        var request = {
+          origin: "<%= @trip.origin %>",
+          destination: "<%= @trip.destination %>",
+          travelMode: google.maps.TravelMode.BICYCLING
+        };
+
+        directionsService.route(request, function(result, status) {
+          if (status == google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(result);
+          }
+        });
+      }
+
+      google.maps.event.addDomListener(window,'load',initialize);
+      calcRoute();
+
+    </script>
+  </head>
+  <body>
+  	<p><%= @trip.origin %> to <%= @trip.destination %></p>
+  	<div id="map-canvas" style="width: 700px; height: 1000px"/>
+  </body>
+</html>
