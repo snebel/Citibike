@@ -17,59 +17,25 @@
     </script>
 
     <script type="text/javascript">
-      //var directionsDisplay;
-      //var directionsService = new google.maps.DirectionsService();
-      //var map;
-
       function initialize() {
-        directionsDisplay = new google.maps.DirectionsRenderer();
-        
         var mapOptions = {
           center: new google.maps.LatLng(40.741, -73.9898),
           zoom: 14,
           mapTypeId: google.maps.MapTypeId.ROADMAP
-          };
+          }; 
 
         map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-        //directionsDisplay.setMap(map);
+        var bikeLayer = new google.maps.BicyclingLayer();
+        bikeLayer.setMap(map);
 
-        //designed to add station markers and add
-        //an info window with available bikes/docks
-        function addMarker(lat, lng, status) {
-          var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(lat, lng),
-            map: map
-            });
-          var infowindow = new google.maps.InfoWindow({
-            content: status
-          });
-          google.maps.event.addListener(marker, 'click', function() { infowindow.open(map, marker); });
-        }
-
-        <% stations = get_stations %>
-        <% stations.each do |station| %>
+        //add station markers
+        <% get_stations.each do |station| %>
           addMarker(<%= station["latitude"] %>, 
             <%= station["longitude"] %>, 
            "Bikes: <%= station["availableBikes"] %> Docks: <%= station["availableDocks"] %>")
         <% end %> 
-      }
-      //used to get directions from strings entered in form
-      /*
-      function calcRoute() {
-        var start = document.getElementById("start").value;
-        var end = document.getElementById("end").value;
-        var request = {
-          origin: start,
-          destination: end,
-          travelMode: google.maps.TravelMode.BICYCLING
-        };
-        directionsService.route(request, function(result, status) {
-          if (status == google.maps.DirectionsStatus.OK) {
-            directionsDisplay.setDirections(result);
-          }
-        });
-      } */
+      } //end initialize
 
       google.maps.event.addDomListener(window,'load',initialize);
 
@@ -77,8 +43,8 @@
   </head>
 
   <body>
-    <h1>Welcome to CityByke</h1>
-    <h4> Enter locations the same way you would on Google Maps. </h4> 
+    <h1>Welcome to CityBike</h1>
+    <h4>Enter locations the same as on Google Maps</h4> 
 
     <%= form_for @trip do |f| %>
       <%= f.label :origin %>
@@ -88,6 +54,6 @@
       <%= f.submit %>
     <% end %>
 
-    <div id="map-canvas" style="width: 700px; height: 1000px"/>
+    <div id="map-canvas" style="width: 700px; height: 900px"/>
   </body>
 </html>

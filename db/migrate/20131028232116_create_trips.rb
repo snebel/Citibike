@@ -11,7 +11,7 @@ class CreateTrips < ActiveRecord::Migration
       t.float :origin_closest_station_long
       t.float :dest_closest_station_lat
       t.float :dest_closest_station_long
-
+      
       t.timestamps
     end
   end
