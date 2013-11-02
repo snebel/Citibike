@@ -2,17 +2,10 @@
 <html>
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <!--
-    <style type="text/css">
-      html { height: 100% }
-      body { height: 100%; margin: 0; text-align: center;padding: 0 }
-      #map-canvas { 
-        height: 100%;
-      }
-    </style>
-	-->
+
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUxuJVuvsR7Fy6J5ZBThZ4zAX79mrFGbI&sensor=true">
+      //having issue here with getting old trips to appear
     </script>
 
     <script type="text/javascript">
@@ -26,15 +19,17 @@
         directionsDisplay.setMap(map);
         directionsDisplay.setPanel(document.getElementById("directions"));
 
-        addMarker(<%=@trip.origin_lat%>, <%=@trip.origin_long%>, "<%=@trip.origin%>");
-        addMarker(<%=@trip.destination_lat%>, <%=@trip.destination_long%>, "<%=@trip.destination%>")
+        addMarker(<%=@trip.origin_lat%>, <%=@trip.origin_long%>, "Origin");
+        addMarker(<%=@trip.destination_lat%>, <%=@trip.destination_long%>, "Destination")
+        //add markers over direction points A and B
+        //addMarker(<%=@trip.origin_closest_station_lat%>, <%=@trip.origin_closest_station_long%>, "test marker")
+        //addMarker()
       } //end initialize
 
       google.maps.event.addDomListener(window,'load',initialize);
 
-      <% orig_station = @trip.closest_station_name(@trip.origin_lat, @trip.origin_long) %>
-      <% dest_station = @trip.closest_station_name(
-          	@trip.destination_lat, @trip.destination_long) %>
+      <% orig_station = "#{@trip.origin_closest_station_lat}, #{@trip.origin_closest_station_long}" %>
+      <% dest_station = "#{@trip.dest_closest_station_lat}, #{@trip.dest_closest_station_long}" %>
       //show station-station directions
       calcRoute("<%= orig_station %>", "<%= dest_station %>");
 

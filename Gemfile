@@ -3,6 +3,10 @@ source 'https://rubygems.org'
 gem 'geocoder'
 gem 'json'
 gem 'citibike'
+gem 'devise'
+
+#adding this gem screwed up the show/create actions!
+#gem 'protected_attributes'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.0'
 

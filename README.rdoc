@@ -27,3 +27,12 @@ Things you may want to cover:
 Please feel free to use a different markup language if you do not plan to run
 <tt>rake doc:app</tt>.
 
+    <!--
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; text-align: center;padding: 0 }
+      #map-canvas { 
+        height: 100%;
+      }
+    </style>
+	-->

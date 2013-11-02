@@ -34,5 +34,16 @@ function addMarker(lat, lng, status) {
   google.maps.event.addListener(marker, 'click', function(){ infowindow.open(map, marker); });
 }
 
+function handle_current_pos(position) {
+  lat = position.coords.latitude;
+  lng = position.coords.longitude;
+
+  addMarker(lat, lng, "current location");
+}
+
+function handleNoGeolocation(errorFlag) {
+  alert("Your browser's locations settings are off. Features that use your current location won't work.");
+}
+
 
 

@@ -5,26 +5,39 @@ class Trip < ActiveRecord::Base
   geocoded_by :destination, :latitude => :destination_lat,
   	:longitude => :destination_long
 
-  after_validation :geocode_both
+  after_validation :geocode_all
 
-  def geocode_both
+  def geocode_all
   	orig = Geocoder.coordinates(self.origin)
     dest = Geocoder.coordinates(self.destination)
     self.origin_lat = orig.first
     self.origin_long = orig.last
     self.destination_lat = dest.first
     self.destination_long = dest.last
+
+    orig_sta = closest_station_coords(origin_lat, origin_long)
+    self.origin_closest_station_lat = orig_sta.first
+    self.origin_closest_station_long = orig_sta.last
+
+    dest_sta = closest_station_coords(destination_lat, destination_long)
+    self.dest_closest_station_lat = dest_sta.first
+    self.dest_closest_station_long = dest_sta.last
   end
 
-  def closest_station_name(lat, long)
+  def closest_station_coords(lat, long)
   	nearbys = Citibike.stations.all_within(lat, long, 0.5)
-  	s = closest_station_id(nearbys, lat, long)
-  	return "#{s["latitude"]}, #{s["longitude"]}"
+  	if nearbys.empty?
+  	  #flash error msg and redirect to homepage?
+  	  return [nil, nil]
+  	else
+  	  sta = closest_station_id(nearbys, lat, long)
+  	  return [sta["latitude"], sta["longitude"]]
+  	end
   end
 
   #takes array of citibike stations
   def closest_station_id(nearbys, lat, long)
-  	dists = Hash.new
+  	dists = Hash.new #ids as keys, distances as vals
   	nearbys.each do |nearby|
   	  lats = lat - nearby["latitude"]
   	  longs = long - nearby["longitude"]
@@ -34,6 +47,13 @@ class Trip < ActiveRecord::Base
   	min = dists.values.min
   	id = dists.key(min)
   	Citibike.stations.find_by_id(id)
+
+  	#if sta["availableBikes"] < 14 #or docks == 0
+  	#  nearbys.delete(sta)
+  	#  closest_station_id(nearbys, lat, long)
+  	#else
+  	#  return sta
+  	#end
   end
 
 end
