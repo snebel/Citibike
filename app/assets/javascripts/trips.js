@@ -21,6 +21,7 @@ function calcRoute(orig, dest, mode) {
 }
 
 //adds a marker with info window to a map
+//fix this to take icon and window action as params
 function addMarker(lat, lng, status) {
   var marker = new google.maps.Marker({
     position: new google.maps.LatLng(lat, lng),
@@ -34,12 +35,7 @@ function addMarker(lat, lng, status) {
   google.maps.event.addListener(marker, 'click', function(){ infowindow.open(map, marker); });
 }
 
-function handle_current_pos(position) {
-  lat = position.coords.latitude;
-  lng = position.coords.longitude;
 
-  addMarker(lat, lng, "current location");
-}
 
 function handleNoGeolocation(errorFlag) {
   alert("Your browser's locations settings are off. Features that use your current location won't work.");

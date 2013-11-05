@@ -9,15 +9,35 @@ module ApplicationHelper
   	result["stationBeanList"]
   end
 
-=begin
-  def nearest_station(lat, lng)
-  	stations = get_stations
-  	d = []
-  	stations.each do |s|
-  	  d << sqrt( (lat - s["latitude"])*(lat - s["latitude"]) + (lat - s["longitude"])*(lat - s["longitude"]) )
-  	end
-
-  	return stations[d.minimum.index]
+  def closest_station_coords(lat, long)
+    nearbys = Citibike.stations.all_within(lat, long, 2.5)
+    if nearbys.empty?
+      #flash error msg and redirect to homepage?
+      return [nil, nil]
+    else
+      sta = closest_station_id(nearbys, lat, long)
+      return [sta["latitude"], sta["longitude"]]
+    end
   end
-=end
+
+  #takes array of citibike stations
+  def closest_station_id(nearbys, lat, long)
+    dists = Hash.new #ids as keys, distances as vals
+    nearbys.each do |nearby|
+      lats = lat - nearby["latitude"]
+      longs = long - nearby["longitude"]
+      dists[nearby["id"]] = Math.sqrt(lats*lats + longs*longs)
+    end
+
+    min = dists.values.min
+    id = dists.key(min)
+    Citibike.stations.find_by_id(id)
+
+    #if sta["availableBikes"] < 14 #or docks == 0
+    #  nearbys.delete(sta)
+    #  closest_station_id(nearbys, lat, long)
+    #else
+    #  return sta
+    #end
+  end
 end

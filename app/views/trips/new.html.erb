@@ -4,22 +4,25 @@
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUxuJVuvsR7Fy6J5ZBThZ4zAX79mrFGbI&sensor=true">
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUxuJVuvsR7Fy6J5ZBThZ4zAX79mrFGbI&amp;sensor=true">
     </script>
 
     <script type="text/javascript">
       function initialize() {
         var mapOptions = {
           center: new google.maps.LatLng(40.741, -73.9898),
-          zoom: 14,
+          //center: new google.maps.LatLng(<%=@lat%>, <%=@lng%>),
+          zoom: 15,
           mapTypeId: google.maps.MapTypeId.ROADMAP
           }; 
 
         map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
         //geolocation
+        /*
         if(navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
+
             //callback success,failure methods
             //found in assets/javascripts/trips.js
             function(position) {
@@ -31,16 +34,32 @@
             handleNoGeolocation);
         }
         else { handleNoGeolocation(false); }
+        */
+        
+        function getGeoLocation() {
+          navigator.geolocation.getCurrentPosition(setGeoCookie, handleNoGeolocation);
+        }
+
+        function setGeoCookie(position) {
+          var cookie_val = position.coords.latitude + "|" + position.coords.longitude;
+          document.cookie = "lat_lng=" + escape(cookie_val);
+          //addMarker(<%=@lat%>, <%=@lng%>, "YOU ARE HERE!");
+        }
+        
+        getGeoLocation();
+      
         //end geolocation
+        //mark closest station to current location
+        //addMarker(<%=@sta_lat%>, <%=@sta_lng%>, "CLOSEST STATION")        
 
         var bikeLayer = new google.maps.BicyclingLayer();
         bikeLayer.setMap(map);
 
         //add station markers
-        <% get_stations.each do |station| %>
-          addMarker(<%= station["latitude"] %>, 
-            <%= station["longitude"] %>, 
-           "Bikes: <%= station["availableBikes"] %> Docks: <%= station["availableDocks"] %>")
+        <% get_stations.each do |sta| %>
+          addMarker(<%= sta["latitude"] %>, 
+            <%= sta["longitude"] %>, 
+           "Bikes: <%= sta["availableBikes"] %> Docks: <%= sta["availableDocks"] %> <%=sta["label"]%>")
         <% end %> 
       } //end initialize
 
@@ -59,8 +78,10 @@
         <% end %>
 
     </header>
-    <h1>Welcome to CityBike</h1>
+    <h1>Welcome to CitiBike</h1>
     <h4>Enter locations the same as on Google Maps</h4> 
+    <h4>Current Location: close to <%=Geocoder.search("#{@lat}, #{@lng}")[0].address%></h4>
+    <h4>Closest station to you: <%=@sta["label"]%>  (<%=@sta["availableBikes"]%> available bikes)</h4>
 
     <%= form_for @trip do |f| %>
       <%= f.label :origin %>
@@ -73,7 +94,7 @@
     <% if signed_in? %>
       Here are your favorite locations:
     <% end %>
-    
+
     <div id="map-canvas" style="width: 700px; height: 900px"/>
 
   </body>

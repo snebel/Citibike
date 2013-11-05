@@ -19,8 +19,8 @@
         directionsDisplay.setMap(map);
         directionsDisplay.setPanel(document.getElementById("directions"));
 
-        addMarker(<%=@trip.origin_lat%>, <%=@trip.origin_long%>, "Origin");
-        addMarker(<%=@trip.destination_lat%>, <%=@trip.destination_long%>, "Destination")
+        addMarker(<%=@trip.origin_lat%>, <%=@trip.origin_long%>, "You are here!");
+        addMarker(<%=@trip.destination_lat%>, <%=@trip.destination_long%>, "Final destination")
         //add markers over direction points A and B
         //addMarker(<%=@trip.origin_closest_station_lat%>, <%=@trip.origin_closest_station_long%>, "test marker")
         //addMarker()
@@ -36,10 +36,12 @@
     </script>
   </head>
   <body>
-  	<p><%= @trip.origin %> to <%= @trip.destination %></p>
+  	<h3><%= @trip.origin %> to <%= @trip.destination %></h3>
+  	<h4>Get a bike at: <%=@orig_sta["label"]%></h4>
+  	<h4>Park your bike at: <%=@dest_sta["label"]%></h4>
+  	<h4><%= @lat_lng %></h4>
   	<div id="map-canvas" style="width: 700px; height: 900px"/>
-  </div>
-  	<div id="directions" style="float:left;width:30%;height:100%">
-  </div>
+  	</div>
+  	<!--<div id="directions" style="float:left;width:30%;height:100%"></div>-->
   </body>
 </html>
