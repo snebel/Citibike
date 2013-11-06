@@ -39,6 +39,13 @@ group :development do
 	gem 'binding_of_caller'
 end
 
+group :production do
+  gem 'rails_12factor'
+  gem 'pg'
+  gem 'unicorn'
+end
+
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false

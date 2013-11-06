@@ -10,15 +10,21 @@ class TripsController < ApplicationController
 
   def new
     @trip = Trip.new
-
-  	@lat_lng = cookies["lat_lng"].split("|")
-    @lat = @lat_lng.first.to_f
-    @lng = @lat_lng.last.to_f
-    @sta = Trip.closest_station_coords(@lat, @lng)
-    @sta_lat = @sta["latitude"]#@sta.first
-    @sta_lng = @sta["longitude"]#@sta.last
+    if cookies["lat_lng"] == nil
+      @lat_lng = [40.741, -73.9898]
+      @lat = @lat_lng.first
+      @lng = @lat_lng.last
+      @sta = {}
+      render :new
+    else
+  	  @lat_lng = cookies["lat_lng"].split("|")
+      @lat = @lat_lng.first.to_f
+      @lng = @lat_lng.last.to_f
+      @sta = Trip.closest_station_coords(@lat, @lng)
+      @sta_lat = @sta["latitude"]#@sta.first
+      @sta_lng = @sta["longitude"]#@sta.last
     # expire cookie here
-    
+    end
   end
 
   def create
@@ -47,7 +53,7 @@ private
   end
 
   def set_cookie
-    
+
   end
 
 
