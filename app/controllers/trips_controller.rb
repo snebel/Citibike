@@ -1,11 +1,14 @@
 class TripsController < ApplicationController
   #before_action :set_cookie, only: :new
-  
+
+  def set_location
+    redirect_to new_trip_path unless cookies['lat_lng'].nil?
+  end
+
   def index
   	#@movies = Movie.all.order("year_released ASC")
   	#@trips = Trip.find(params[:q])
     redirect_to '/trips/new'
-
   end
 
   def new

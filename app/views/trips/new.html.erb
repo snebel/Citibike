@@ -30,21 +30,6 @@
 
         map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-        //geolocation
-        
-        function getGeoLocation() {
-          navigator.geolocation.getCurrentPosition(setGeoCookie, handleNoGeolocation);
-        }
-
-        function setGeoCookie(position) {
-          var cookie_val = position.coords.latitude + "|" + position.coords.longitude;
-          document.cookie = "lat_lng=" + escape(cookie_val);
-          //addMarker(<%=@lat%>, <%=@lng%>, "YOU ARE HERE!");
-        }
-        
-        getGeoLocation();
-      
-        //end geolocation
         //mark closest station to current location
         //addMarker(<%=@sta_lat%>, <%=@sta_lng%>, "CLOSEST STATION")        
 
