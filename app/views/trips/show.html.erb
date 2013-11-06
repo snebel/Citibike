@@ -36,6 +36,9 @@
     </script>
   </head>
   <body>
+  	<header>
+  	  <%= link_to "home", root_path %>  
+  	</header>
   	<h3><%= @trip.origin %> to <%= @trip.destination %></h3>
   	<h4>Get a bike at: <%=@orig_sta["label"]%></h4>
   	<h4>Park your bike at: <%=@dest_sta["label"]%></h4>
