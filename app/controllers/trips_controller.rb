@@ -15,7 +15,6 @@ class TripsController < ApplicationController
       @lat = @lat_lng.first
       @lng = @lat_lng.last
       @sta = {}
-      render :new
     else
   	  @lat_lng = cookies["lat_lng"].split("|")
       @lat = @lat_lng.first.to_f
