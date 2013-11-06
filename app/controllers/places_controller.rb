@@ -16,6 +16,19 @@ class PlacesController < ApplicationController
 
   def show
 	@place = Place.find(params[:id])
+	
+	#lat = cookies["lat_lng"].split("|").first
+	#lng = cookies["lat_lng"].split("|").last
+	#@orig = cookies["lat_lng"]
+	@orig = @place.address
+	@dest = @place.address
+	@trip = Trip.new origin: @orig, destination: @dest
+	if @trip.save
+	  redirect_to @trip #render template: "trips/show"
+	else
+	  render :show
+	end
+
   end
 
 private

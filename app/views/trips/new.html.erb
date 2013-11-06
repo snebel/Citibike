@@ -39,14 +39,14 @@
         function setGeoCookie(position) {
           var cookie_val = position.coords.latitude + "|" + position.coords.longitude;
           document.cookie = "lat_lng=" + escape(cookie_val);
-          //addMarker(<%=@lat%>, <%=@lng%>, "YOU ARE HERE!");
+          addMarker(<%=@lat%>, <%=@lng%>, "YOU ARE HERE!");
         }
         
         getGeoLocation();
       
         //end geolocation
         //mark closest station to current location
-        //addMarker(<%=@sta_lat%>, <%=@sta_lng%>, "CLOSEST STATION")        
+        addMarker(<%=@sta_lat%>, <%=@sta_lng%>, "CLOSEST STATION")        
 
         var bikeLayer = new google.maps.BicyclingLayer();
         bikeLayer.setMap(map);
@@ -77,11 +77,9 @@
 
     </header>
     <h1>Welcome to CitiBike-Better</h1> 
-    <h4>Current Location (approximate): <%=Geocoder.search("#{@lat}, #{@lng}")[0].address%></h4>
-    <p>Current location features stil under development...</p>
-
-    <h4>Closest station to you: <%=@sta["label"]%>
-      (<%=@sta["availableBikes"]%> available bikes, <%=@sta["availableDocks"]%> available docks)</h4> 
+    <h4>Current Location (approximate): <%=Geocoder.search("#{@lat}, #{@lng}")[0].address%></br> Closest station: <%=@sta["label"]%>
+      (<%=@sta["availableBikes"]%> bikes,  <%=@sta["availableDocks"]%> open docks)</h4> 
+    
 
     <% if signed_in? %>
       <h4>Favorite Places:

@@ -2,11 +2,16 @@ class TripsController < ApplicationController
   #before_action :set_cookie, only: :new
   
   def index
-  	#@movies = Movie.all.order("year_released ASC")
-  	#@trips = Trip.find(params[:q])
-    redirect_to '/trips/new'
-
+    @trip = Trip.new
+    # expire cookie here
+    end
   end
+
+=begin
+  def new
+    @trip = Trip.new(trip_params)
+  end
+=end
 
   def new
     @trip = Trip.new
