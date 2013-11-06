@@ -19,22 +19,6 @@
         map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
         //geolocation
-        /*
-        if(navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-
-            //callback success,failure methods
-            //found in assets/javascripts/trips.js
-            function(position) {
-              lat = position.coords.latitude;
-              lng = position.coords.longitude;
-              addMarker(lat, lng, "current location");
-
-            }, 
-            handleNoGeolocation);
-        }
-        else { handleNoGeolocation(false); }
-        */
         
         function getGeoLocation() {
           navigator.geolocation.getCurrentPosition(setGeoCookie, handleNoGeolocation);
@@ -81,6 +65,7 @@
     <h1>Welcome to CitiBike</h1>
     <h4>Enter locations the same as on Google Maps</h4> 
     <h4>Current Location: close to <%=Geocoder.search("#{@lat}, #{@lng}")[0].address%></h4>
+    <p>Current location features are stil a bit iffy...</p>
     <h4>Closest station to you: <%=@sta["label"]%>  (<%=@sta["availableBikes"]%> available bikes)</h4>
 
     <%= form_for @trip do |f| %>
