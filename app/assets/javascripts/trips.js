@@ -36,11 +36,10 @@ function addMarker(lat, lng, status) {
   google.maps.event.addListener(marker, 'click', function(){ infowindow.open(map, marker); });
 }
 
-
-
+/*
 function handleNoGeolocation(errorFlag) {
   alert("Your browser's locations settings are off. Features that use your current location won't work.");
 }
-
+*/
 
 

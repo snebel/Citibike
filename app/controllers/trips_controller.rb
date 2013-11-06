@@ -1,34 +1,32 @@
 class TripsController < ApplicationController
   #before_action :set_cookie, only: :new
-  
+
+  def set_location
+    redirect_to new_trip_path unless cookies['lat_lng'].nil?
+    flash[:notice] = "we are finding your location..."
+  end
+
   def index
     @trip = Trip.new
     # expire cookie here
-    end
   end
-
-=begin
-  def new
-    @trip = Trip.new(trip_params)
-  end
-=end
 
   def new
     @trip = Trip.new
-    if cookies["lat_lng"] == nil
-      @lat_lng = [40.741, -73.9898]
-      @lat = @lat_lng.first
-      @lng = @lat_lng.last
-      @sta = {}
-    else
+    #if cookies["lat_lng"] == nil
+    #  @lat_lng = [40.741, -73.9898]
+    #  @lat = @lat_lng.first
+    #  @lng = @lat_lng.last
+    #  @sta = {}
+    #else
   	  @lat_lng = cookies["lat_lng"].split("|")
       @lat = @lat_lng.first.to_f
       @lng = @lat_lng.last.to_f
       @sta = Trip.closest_station_coords(@lat, @lng)
-      @sta_lat = @sta["latitude"]#@sta.first
-      @sta_lng = @sta["longitude"]#@sta.last
+      @sta_lat = @sta["latitude"]
+      @sta_lng = @sta["longitude"]
     # expire cookie here
-    end
+    #end
   end
 
   def create
