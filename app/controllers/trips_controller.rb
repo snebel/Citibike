@@ -3,7 +3,8 @@ class TripsController < ApplicationController
 
   def set_location
     redirect_to new_trip_path unless cookies['lat_lng'].nil?
-    flash[:notice] = "we are finding your location..."
+    flash[:notice] = "Please wait while we find your location...
+    refresh the page if you are not redirected in a few seconds."
   end
 
   def index
@@ -13,20 +14,14 @@ class TripsController < ApplicationController
 
   def new
     @trip = Trip.new
-    #if cookies["lat_lng"] == nil
-    #  @lat_lng = [40.741, -73.9898]
-    #  @lat = @lat_lng.first
-    #  @lng = @lat_lng.last
-    #  @sta = {}
-    #else
-  	  @lat_lng = cookies["lat_lng"].split("|")
-      @lat = @lat_lng.first.to_f
-      @lng = @lat_lng.last.to_f
-      @sta = Trip.closest_station_coords(@lat, @lng)
-      @sta_lat = @sta["latitude"]
-      @sta_lng = @sta["longitude"]
-    # expire cookie here
-    #end
+    cookies["lat_lng"] ||= "40.741|-73.9898"
+	  @lat_lng = cookies["lat_lng"].split("|")
+    @lat = @lat_lng.first.to_f
+    @lng = @lat_lng.last.to_f
+    @sta = Trip.closest_station_coords(@lat, @lng)
+    @sta_lat = @sta["latitude"]
+    @sta_lng = @sta["longitude"]
+
   end
 
   def create

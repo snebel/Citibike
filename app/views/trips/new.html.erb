@@ -30,24 +30,9 @@
 
         map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-        //geolocation
-        /*
-        function getGeoLocation() {
-          navigator.geolocation.getCurrentPosition(setGeoCookie, handleNoGeolocation);
-        }
-
-        function setGeoCookie(position) {
-          var cookie_val = position.coords.latitude + "|" + position.coords.longitude;
-          document.cookie = "lat_lng=" + escape(cookie_val);
-        }
-        
-        getGeoLocation();
-        */
-        //end geolocation
-
         //mark closest station and current location
         addMarker(<%=@lat%>, <%=@lng%>, "YOU ARE HERE!");
-        addMarker(<%=@sta_lat%>, <%=@sta_lng%>, "CLOSEST STATION")        
+        addMarker(<%=@sta_lat%>, <%=@sta_lng%>, "CLOSEST STATION");    
 
         var bikeLayer = new google.maps.BicyclingLayer();
         bikeLayer.setMap(map);
@@ -61,9 +46,6 @@
       } //end initialize
 
       google.maps.event.addDomListener(window,'load',initialize);
-      //$(document).bind("projectLoadComplete", initialize);
-      //$(document).on('pageshow', '#wrapper', function(e, data){ initialize(); }); 
-
     </script>
   </head>
 
@@ -77,10 +59,70 @@
         <% end %>
 
     </header>
-    <h1>Welcome to CitiBike-Better</h1> 
-    <h4>Current Location (approximate): <%=Geocoder.search("#{@lat}, #{@lng}")[0].address%></br> Closest station: <%=@sta["label"]%>
+    <h1>Welcome to CitiBike-Better</h1>
+
+    <script type="text/javascript">
+    //GEOLOCATION
+      navigator.geolocation.getCurrentPosition(handleGeolocation, handleNoGeolocation);
+
+
+      function handleGeolocation(position) {
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+
+        var cookie_val = lat + "|" + lng;
+        document.cookie = "lat_lng=" + escape(cookie_val);
+        var la;
+        setAddress(lat, lng);
+        setStation(lat, lng);
+      };
+
+      function setAddress(latitude, longitude) {
+        geocoder = new google.maps.Geocoder();
+        latlng = new google.maps.LatLng(latitude, longitude);
+
+        result = geocoder.geocode({'latLng': latlng}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            current_address = results[0].formatted_address;
+            $("#address").html("Current Location (approximate): " + current_address);
+          }
+          else {
+            $("#address").html("Geocoder failed due to: " + status);
+          }
+        });
+      }
+
+      function setStation(latitude, longitude) {
+        // sta = Trip.closest_station_coords(latitude, longitude) %>
+      }
+
+      function handleNoGeolocation(error) {
+        switch(error.code)
+        {
+          case error.PERMISSION_DENIED:
+            return "User denied the request for Geolocation.";
+          case error.POSITION_UNAVAILABLE:
+            return "Location information is unavailable.";
+          case error.TIMEOUT:
+            return "The request to get user location timed out.";
+          case error.UNKNOWN_ERROR:
+            return "An unknown error occurred.";
+        }
+      }
+    </script>
+
+    <div id="address"><p>Finding current location... <%= @current_address %></p></div>
+
+    <script>
+      //$("#station").html("closest station: " + closest_station);
+    </script>
+
+    <!--<div id="station"><p>Finding closest station... <%= @closest_station %></div>-->
+
+    <h4> Closest station: <%=@sta["label"]%>
       (<%=@sta["availableBikes"]%> bikes,  <%=@sta["availableDocks"]%> open docks)</h4> 
     
+    <%= cookies["lat_lng"] %>
 
     <% if signed_in? %>
       <h4>Favorite Places:

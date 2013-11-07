@@ -2,8 +2,8 @@ Citibike::Application.routes.draw do
   devise_for :users
   resources :trips
   resources :places
-  #root 'trips#new'
-  root 'trips#set_location'
+  root 'trips#new'
+  #root 'trips#set_location'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

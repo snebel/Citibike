@@ -1,1 +1,53 @@
-<h1>Current Location to <%=@place.address%></h1>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUxuJVuvsR7Fy6J5ZBThZ4zAX79mrFGbI&sensor=true">
+      //having issue here with getting old trips to appear
+    </script>
+
+    <script type="text/javascript">
+      var directionsService = new google.maps.DirectionsService();
+      var lat = <%= @orig.split('|').first.to_f %>;
+      var lng = <%= @orig.split('|').last.to_f %>;
+
+      function initialize() {
+        directionsDisplay = new google.maps.DirectionsRenderer();
+
+        var mapOptions = {
+          //center: new google.maps.LatLng(40.741, -73.9898),
+          center: new google.maps.LatLng(<%=@place.lat%>, <%=@place.lng%>),
+          zoom: 16,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+          }; 
+
+        map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
+        directionsDisplay.setMap(map);
+        directionsDisplay.setPanel(document.getElementById("directions"));
+
+        addMarker(lat, lng, "You are here!");
+        //addMarker(<%=@place.lat%>, <%=@place.lng%>, "<%=@place.name%>");
+      } //end initialize
+
+      google.maps.event.addDomListener(window,'load',initialize);
+
+      calcRoute("<%= "#{@orig.split('|').first}, #{@orig.split('|').last}" %>", "<%= @place.address %>")
+      
+    </script>
+  </head>
+  <body>
+  	<header>
+  	  <%= link_to "home", root_path %> 
+  	</header>
+  	<h1>Current location to <%=@place.name%> (<%=@place.address%>)</h1>
+
+  	
+  	<div id="map-canvas" style="width: 700px; height: 900px"/>
+  	</div>
+  	<!--<div id="directions" style="float:left;width:30%;height:100%"></div>-->
+  </body>
+</html>
