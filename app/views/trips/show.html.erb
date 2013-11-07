@@ -21,9 +21,6 @@
 
         addMarker(<%=@trip.origin_lat%>, <%=@trip.origin_long%>, "You are here!");
         addMarker(<%=@trip.destination_lat%>, <%=@trip.destination_long%>, "Final destination")
-        //add markers over direction points A and B
-        //addMarker(<%=@trip.origin_closest_station_lat%>, <%=@trip.origin_closest_station_long%>, "test marker")
-        //addMarker()
       } //end initialize
 
       google.maps.event.addDomListener(window,'load',initialize);
