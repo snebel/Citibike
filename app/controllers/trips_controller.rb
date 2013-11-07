@@ -15,6 +15,11 @@ class TripsController < ApplicationController
   def new
     @trip = Trip.new
     cookies["lat_lng"] ||= "40.741|-73.9898"
+    if cookies["lat_lng"] == "40.741|-73.9898"
+      @zoom = 14
+    else
+      @zoom = 16
+    end
 	  @lat_lng = cookies["lat_lng"].split("|")
     @lat = @lat_lng.first.to_f
     @lng = @lat_lng.last.to_f

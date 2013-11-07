@@ -24,7 +24,7 @@
         var mapOptions = {
           //center: new google.maps.LatLng(40.741, -73.9898),
           center: new google.maps.LatLng(<%=@lat%>, <%=@lng%>),
-          zoom: 16,
+          zoom: <%= @zoom %>,
           mapTypeId: google.maps.MapTypeId.ROADMAP
           }; 
 
@@ -46,6 +46,8 @@
       } //end initialize
 
       google.maps.event.addDomListener(window,'load',initialize);
+
+      google.maps.event.addDomListener(window, 'page:load', initialize); //makes map appear on navigation
     </script>
   </head>
 
@@ -74,7 +76,7 @@
         document.cookie = "lat_lng=" + escape(cookie_val);
         var la;
         setAddress(lat, lng);
-        setStation(lat, lng);
+        //setStation();
       };
 
       function setAddress(latitude, longitude) {
@@ -92,7 +94,7 @@
         });
       }
 
-      function setStation(latitude, longitude) {
+      function setStation(lat_lng) {
         // sta = Trip.closest_station_coords(latitude, longitude) %>
       }
 
@@ -117,12 +119,14 @@
       //$("#station").html("closest station: " + closest_station);
     </script>
 
-    <!--<div id="station"><p>Finding closest station... <%= @closest_station %></div>-->
+    <!--<div id="station"><p>Refresh the page... <%= @closest_station %></div>-->
 
-    <h4> Closest station: <%=@sta["label"]%>
-      (<%=@sta["availableBikes"]%> bikes,  <%=@sta["availableDocks"]%> open docks)</h4> 
-    
-    <%= cookies["lat_lng"] %>
+    <span><h4> Closest station: </h4>
+      <% if cookies["lat_lng"] == "40.741|-73.9898" %>
+        <%= link_to "refresh to find closest station", root_path %></span>
+      <% else %>
+        <h4><%=@sta["label"]%> (<%=@sta["availableBikes"]%> bikes,  <%=@sta["availableDocks"]%> open docks)</h4>
+      <% end %>
 
     <% if signed_in? %>
       <h4>Favorite Places:

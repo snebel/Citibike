@@ -10,7 +10,7 @@
     </script>
 
     <script type="text/javascript">
-      var directionsService = new google.maps.DirectionsService();
+       directionsService = new google.maps.DirectionsService();
       var lat = <%= @orig.split('|').first.to_f %>;
       var lng = <%= @orig.split('|').last.to_f %>;
 
@@ -27,15 +27,22 @@
         map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
         directionsDisplay.setMap(map);
-        directionsDisplay.setPanel(document.getElementById("directions"));
+        //directionsDisplay.setPanel(document.getElementById("directions"));
 
         addMarker(lat, lng, "You are here!");
-        //addMarker(<%=@place.lat%>, <%=@place.lng%>, "<%=@place.name%>");
+        addMarker(<%=@place.lat%>, <%=@place.lng%>, "<%=@place.name%>");
       } //end initialize
 
-      google.maps.event.addDomListener(window,'load',initialize);
+      google.maps.event.addDomListener(window,'page:load',initialize);
 
-      calcRoute("<%= "#{@orig.split('|').first}, #{@orig.split('|').last}" %>", "<%= @place.address %>")
+      //google.maps.event.addDomListener(window, 'page:load', initialize);
+
+      <% lat = @orig.split('|').first.to_f %>
+      <% lng = @orig.split('|').last.to_f %>
+      <% sta = Trip.closest_station_coords(lat, lng) %>
+      <% coords = "#{sta["latitude"]}, #{sta["longitude"]}" %>
+
+      calcRoute("<%= coords %>", "<%= @place.address %>");
       
     </script>
   </head>
@@ -44,6 +51,8 @@
   	  <%= link_to "home", root_path %> 
   	</header>
   	<h1>Current location to <%=@place.name%> (<%=@place.address%>)</h1>
+    <p><%= cookies["lat_lng"] %>
+
 
   	
   	<div id="map-canvas" style="width: 700px; height: 900px"/>
