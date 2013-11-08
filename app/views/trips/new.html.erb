@@ -15,6 +15,7 @@
     </style>
     
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    
 
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUxuJVuvsR7Fy6J5ZBThZ4zAX79mrFGbI&amp;sensor=true&callback=initialize">
     </script>
@@ -115,12 +116,6 @@
 
     <div id="address"><p>Finding current location... <%= @current_address %></p></div>
 
-    <script>
-      //$("#station").html("closest station: " + closest_station);
-    </script>
-
-    <!--<div id="station"><p>Refresh the page... <%= @closest_station %></div>-->
-
     <span><h4> Closest station: </h4>
       <% if cookies["lat_lng"] == "40.741|-73.9898" %>
         <%= link_to "refresh to find closest station", root_path %></span>
@@ -130,11 +125,12 @@
 
     <% if signed_in? %>
       <h4>Favorite Places:
-      
       <% current_user.places.each do |place| %>
-        <%= link_to place.name, place %>
+        <%= link_to place.name, place, 'data-no-turbolink' => true %>
       <% end %> </h4>
       <%= link_to 'add a new place', new_place_path %>
+    <% else %>
+      <%= link_to 'sign in', new_user_session_path %> to add favorite places
     <% end %>  
 
     <p>Enter locations the same as on Google Maps</p>
