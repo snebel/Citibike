@@ -32,8 +32,7 @@
         map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
         //mark closest station and current location
-        addMarker(<%=@lat%>, <%=@lng%>, "YOU ARE HERE!");
-        addMarker(<%=@sta_lat%>, <%=@sta_lng%>, "CLOSEST STATION");    
+        addMarker(<%=@lat%>, <%=@lng%>, "YOU ARE HERE!");   
 
         var bikeLayer = new google.maps.BicyclingLayer();
         bikeLayer.setMap(map);
@@ -95,10 +94,6 @@
         });
       }
 
-      function setStation(lat_lng) {
-        // sta = Trip.closest_station_coords(latitude, longitude) %>
-      }
-
       function handleNoGeolocation(error) {
         switch(error.code)
         {
@@ -116,11 +111,15 @@
 
     <div id="address"><p>Finding current location... <%= @current_address %></p></div>
 
-    <span><h4> Closest station: </h4>
+    <span><h4> Closest stations: </h4>
       <% if cookies["lat_lng"] == "40.741|-73.9898" %>
         <%= link_to "refresh to find closest station", root_path %></span>
+      <% elsif @stas.empty? %>
+        Not close to any citibike stations. Zoom out to see all stations.</br>
       <% else %>
-        <h4><%=@sta["label"]%> (<%=@sta["availableBikes"]%> bikes,  <%=@sta["availableDocks"]%> open docks)</h4>
+        <% @stas.each do |sta| %>
+          <h4><%= sta["label"]%> (<%= sta.available_bikes %> bikes,  <%= sta.available_docks %> open docks)</h4>
+        <% end %>
       <% end %>
 
     <% if signed_in? %>

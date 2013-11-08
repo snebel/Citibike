@@ -20,43 +20,34 @@ class TripsController < ApplicationController
     else
       @zoom = 16
     end
+    #used for marking current location and closest station
 	  @lat_lng = cookies["lat_lng"].split("|")
     @lat = @lat_lng.first.to_f
     @lng = @lat_lng.last.to_f
-    @sta = Trip.closest_station_coords(@lat, @lng)
-    @sta_lat = @sta["latitude"]
-    @sta_lng = @sta["longitude"]
-
+    @stas = Trip.find_closest_stations(@lat, @lng)
   end
 
   def create
   	@trip = Trip.new(trip_params)
-    #add these to the database instead?
-    #used for getting station names on show page
-
-  	if @trip.save
-  	  redirect_to @trip
-  	else
-  	  render :new
-  	end
+  	#@trip.save ? redirect_to @trip : render :new
+    if @trip.save
+      redirect_to @trip
+    else
+      render :new
+    end
   end
 
   def show
   	@trip = Trip.find(params[:id])
-    @orig_sta = Trip.closest_station_coords(
-      @trip.origin_lat, @trip.origin_long)
-    @dest_sta = Trip.closest_station_coords(
-      @trip.destination_lat, @trip.destination_long)
+    @orig_sta = Trip.find_closest_stations(
+                @trip.origin_lat, @trip.origin_long).first
+    @dest_sta = Trip.find_closest_stations(
+                @trip.destination_lat, @trip.destination_long).first
   end
 
 private
   def trip_params
   	params.require('trip').permit(:origin, :destination)
   end
-
-  def set_cookie
-
-  end
-
 
 end

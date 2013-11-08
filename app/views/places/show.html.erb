@@ -37,11 +37,13 @@
 
       <% lat = @orig.split('|').first.to_f %>
       <% lng = @orig.split('|').last.to_f %>
-      <% o_sta = Trip.closest_station_coords(lat, lng) %>
-      <% o_sta_coords = o_sta["latitude"].to_s + ", " + o_sta["longitude"].to_s %>
+      <% orig_stas = Trip.find_closest_stations(lat, lng) %>
+      <% o_sta = orig_stas.first %>
+      <% o_sta_coords = o_sta.lat.to_s + ", " + o_sta.long.to_s %>
       
-      <% d_sta = Trip.closest_station_coords(@place.lat, @place.lng) %>
-      <% d_sta_coords = d_sta["latitude"].to_s + ", " + d_sta["longitude"].to_s %>
+      <% dest_stas = Trip.find_closest_stations(@place.lat, @place.lng) %>
+      <% d_sta = dest_stas.first %>
+      <% d_sta_coords = d_sta.lat.to_s + ", " + d_sta.long.to_s %>
 
       calcRoute("<%= o_sta_coords %>", "<%= d_sta_coords %>");
     </script>

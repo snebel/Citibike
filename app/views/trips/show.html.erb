@@ -27,10 +27,9 @@
 
       google.maps.event.addDomListener(window,'load',initialize);
 
-      <% orig_station = "#{@trip.origin_closest_station_lat}, #{@trip.origin_closest_station_long}" %>
-      <% dest_station = "#{@trip.dest_closest_station_lat}, #{@trip.dest_closest_station_long}" %>
+
       //show station-station directions
-      calcRoute("<%= orig_station %>", "<%= dest_station %>");
+      calcRoute("<%= "#{@orig_sta.lat}, #{@orig_sta.long}" %>", "<%= "#{@dest_sta.lat}, #{@dest_sta.long}" %>");
 
     </script>
   </head>
