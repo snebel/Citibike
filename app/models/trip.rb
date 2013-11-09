@@ -33,7 +33,7 @@ class Trip < ActiveRecord::Base
   #make this return an array of stations sorted by distance from lat, long
   def self.find_closest_stations(lat, long)
     #array of Stations
-  	nearbys = Citibike.stations.all_within(lat, long, 0.5)
+  	nearbys = Citibike.stations.all_within(lat, long, 0.3)
   	#if nearbys.empty?
     #HANDLE THIS IN VALIDATOR
   	#sta = closest_station_id(nearbys, lat, long)
@@ -51,18 +51,23 @@ class Trip < ActiveRecord::Base
     return sorted_nearbys
   end
 
-  #takes array of citibike stations
-=begin not being used
-  def self.closest_station_id(nearbys, lat, long)
-  	dists = Hash.new #ids as keys, distances as vals
-  	nearbys.each do |nearby|
-  	  lats = lat - nearby["latitude"]
-  	  longs = long - nearby["longitude"]
-  	  dists[nearby["id"]] = Math.sqrt(lats*lats + longs*longs)
-  	end
-
-  	min = dists.values.min
-  	id = dists.key(min)
+  #stations is array of stations sorted by distance
+  def self.find_available_bike(stations)
+    stations.each do |sta|
+      if sta.available_bikes > 1 && sta.status == "Active"
+        return sta
+      end
+    end
+    stations.empty? ? nil : stations[0]
   end
-=end
+
+  def self.find_available_dock(stations)
+    stations.each do |sta|
+      if sta.available_docks > 1 && sta.status == "Active"
+        return sta
+      end
+    end
+    stations.empty? ? nil : stations[0]
+  end
+
 end

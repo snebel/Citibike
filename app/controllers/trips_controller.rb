@@ -14,12 +14,13 @@ class TripsController < ApplicationController
 
   def new
     @trip = Trip.new
-    cookies["lat_lng"] ||= "40.741|-73.9898"
-    if cookies["lat_lng"] == "40.741|-73.9898"
-      @zoom = 14
-    else
+    #cookies["lat_lng"] ||= "40.741|-73.9898"
+    #if cookies["lat_lng"] == "40.741|-73.9898"
+    #  @zoom = 14
+    #else
       @zoom = 16
-    end
+    #end
+    cookies["lat_lng"] = "40.7411|-73.9898"
     #used for marking current location and closest station
 	  @lat_lng = cookies["lat_lng"].split("|")
     @lat = @lat_lng.first.to_f
@@ -39,10 +40,13 @@ class TripsController < ApplicationController
 
   def show
   	@trip = Trip.find(params[:id])
-    @orig_sta = Trip.find_closest_stations(
-                @trip.origin_lat, @trip.origin_long).first
-    @dest_sta = Trip.find_closest_stations(
-                @trip.destination_lat, @trip.destination_long).first
+    @orig_stations = Trip.find_closest_stations(
+                @trip.origin_lat, @trip.origin_long)
+    @orig_sta = Trip.find_available_bike(@orig_stations)
+
+    @dest_stations = Trip.find_closest_stations(
+                @trip.destination_lat, @trip.destination_long)
+    @dest_sta = Trip.find_available_dock(@dest_stations)
   end
 
 private

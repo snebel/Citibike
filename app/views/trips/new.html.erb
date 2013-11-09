@@ -39,15 +39,11 @@
 
         //add station markers
         <% get_stations.each do |sta| %>
-          addMarker(<%= sta["latitude"] %>, 
-            <%= sta["longitude"] %>, 
-           "Bikes: <%= sta["availableBikes"] %> Docks: <%= sta["availableDocks"] %> <%=sta["label"]%>")
+          addMarker(<%= sta["latitude"] %>, <%= sta["longitude"] %>, "Bikes: <%= sta["availableBikes"] %> Docks: <%= sta["availableDocks"] %> <%=sta["label"]%>")
         <% end %> 
       } //end initialize
 
       google.maps.event.addDomListener(window,'load',initialize);
-
-      //google.maps.event.addDomListener(window, 'page:load', initialize); //makes map appear on navigation
     </script>
   </head>
 

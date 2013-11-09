@@ -29,7 +29,11 @@
 
 
       //show station-station directions
-      calcRoute("<%= "#{@orig_sta.lat}, #{@orig_sta.long}" %>", "<%= "#{@dest_sta.lat}, #{@dest_sta.long}" %>");
+      <% if @orig_sta != nil && @dest_sta != nil %>
+        calcRoute("<%= "#{@orig_sta.lat}, #{@orig_sta.long}" %>", "<%= "#{@dest_sta.lat}, #{@dest_sta.long}" %>");
+      <% else %>
+        calcRoute("<%= @trip.origin %>", "<%= @trip.destination %>");
+      <% end %>
 
     </script>
   </head>
@@ -38,9 +42,14 @@
   	  <%= link_to "home", root_path %>  
   	</header>
   	<h3><%= @trip.origin %> to <%= @trip.destination %></h3>
-  	<h4>Get a bike at: <%=@orig_sta["label"]%></h4>
-  	<h4>Park your bike at: <%=@dest_sta["label"]%></h4>
-  	<h4><%= @lat_lng %></h4>
+    <% if @orig_sta == nil || @dest_sta == nil %>
+      <h4>Citibike is not a good choice for this route</h4>
+    <% else %>
+  	  <h4>Closest bike at: <%= @orig_sta["label"] %> (<%= @orig_sta.available_bikes %> bikes available)</h4>
+
+      <h4>Closest dock at: <%=@dest_sta["label"]%> (<%= @dest_sta.available_docks %> docks available)</h4>
+    <% end %>
+
   	<div id="map-canvas" style="width: 700px; height: 900px"/>
   	</div>
   	

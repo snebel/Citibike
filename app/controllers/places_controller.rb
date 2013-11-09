@@ -16,7 +16,14 @@ class PlacesController < ApplicationController
 
   def show
 	  @place = Place.find(params[:id])
-	  @orig = cookies["lat_lng"]
+    cookies["lat_lng"] = "40.7411|-73.9898" #temp
+	  @orig = cookies["lat_lng"].split('|')
+    @lat = @orig.first.to_f
+    @lng = @orig.last.to_f
+    @orig_stas = Trip.find_closest_stations(@lat, @lng)
+    @o_sta = Trip.find_available_bike(@orig_stas)
+    @dest_stas = Trip.find_closest_stations(@place.lat, @place.lng)
+    @d_sta = Trip.find_available_dock(@dest_stas)
   end
 
 =begin not being used

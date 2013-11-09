@@ -10,8 +10,7 @@
 
     <script type="text/javascript">
       var directionsService = new google.maps.DirectionsService();
-      var lat = <%= @orig.split('|').first.to_f %>;
-      var lng = <%= @orig.split('|').last.to_f %>;
+
 
       function initialize() {
         directionsDisplay = new google.maps.DirectionsRenderer();
@@ -27,25 +26,13 @@
         directionsDisplay.setMap(map);
         directionsDisplay.setPanel(document.getElementById("directions"));
 
-        addMarker(lat, lng, "You are here!");
+        addMarker(<%= @lat %>, <%= @lng %>, "You are here!");
         addMarker(<%=@place.lat%>, <%=@place.lng%>, "<%=@place.name%>");
       } //end initialize
       
       google.maps.event.addDomListener(window,'load',initialize);
 
-      //google.maps.event.addDomListener(window, 'page:load', initialize);
-
-      <% lat = @orig.split('|').first.to_f %>
-      <% lng = @orig.split('|').last.to_f %>
-      <% orig_stas = Trip.find_closest_stations(lat, lng) %>
-      <% o_sta = orig_stas.first %>
-      <% o_sta_coords = o_sta.lat.to_s + ", " + o_sta.long.to_s %>
-      
-      <% dest_stas = Trip.find_closest_stations(@place.lat, @place.lng) %>
-      <% d_sta = dest_stas.first %>
-      <% d_sta_coords = d_sta.lat.to_s + ", " + d_sta.long.to_s %>
-
-      calcRoute("<%= o_sta_coords %>", "<%= d_sta_coords %>");
+      calcRoute("<%= "#{@o_sta.lat}, #{@o_sta.long}" %>", "<%= "#{@d_sta.lat}, #{@d_sta.long}" %>");
     </script>
 
   </head>
@@ -55,8 +42,8 @@
   	</header>
   	<h2>Current location to <%=@place.name%> (<%=@place.address%>)</h2>
 
-    <h4>Get bike at: <%= o_sta["label"] %> (<%= o_sta["availableBikes"] %> bikes available)</h4>
-    <h4>Park bike at: <%= d_sta["label"] %> (<%= d_sta["availableDocks"] %> docks available)</h4>
+    <h4>Get bike at: <%= @o_sta["label"] %> (<%= @o_sta["availableBikes"] %> bikes available)</h4>
+    <h4>Park bike at: <%= @d_sta["label"] %> (<%= @d_sta["availableDocks"] %> docks available)</h4>
   	
   	<div id="map-canvas" style="width: 700px; height: 900px"/>
   	</div>
