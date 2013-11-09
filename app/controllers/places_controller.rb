@@ -16,7 +16,7 @@ class PlacesController < ApplicationController
 
   def show
 	  @place = Place.find(params[:id])
-    cookies["lat_lng"] = "40.7411|-73.9898" #temp
+    #cookies["lat_lng"] = "40.7411|-73.9898" #temp
 	  @orig = cookies["lat_lng"].split('|')
     @lat = @orig.first.to_f
     @lng = @orig.last.to_f

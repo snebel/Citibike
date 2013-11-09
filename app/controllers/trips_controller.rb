@@ -14,13 +14,13 @@ class TripsController < ApplicationController
 
   def new
     @trip = Trip.new
-    #cookies["lat_lng"] ||= "40.741|-73.9898"
-    #if cookies["lat_lng"] == "40.741|-73.9898"
-    #  @zoom = 14
-    #else
+    cookies["lat_lng"] ||= "40.741|-73.9898"
+    if cookies["lat_lng"] == "40.741|-73.9898"
+      @zoom = 14
+    else
       @zoom = 16
-    #end
-    cookies["lat_lng"] = "40.7411|-73.9898"
+    end
+    #cookies["lat_lng"] = "40.7411|-73.9898"
     #used for marking current location and closest station
 	  @lat_lng = cookies["lat_lng"].split("|")
     @lat = @lat_lng.first.to_f
