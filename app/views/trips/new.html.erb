@@ -51,8 +51,8 @@
   <body>
     <header>
       <% if signed_in? %>
-        Signed in as <%= current_user.email %>
-        <%= link_to "sign out", destroy_user_session_path, method: "delete" %>        
+        <p>Signed in as <%= current_user.email %>
+        <%= link_to "sign out", destroy_user_session_path, method: "delete" %></p>      
       <% end %>
     </header>
 
@@ -107,23 +107,23 @@
       }
     </script>
 
-    <!--<div id="address"><p>Finding current location... <%= @current_address %></p></div>-->
-
+      <div id="address"><p>Finding current location... <%= @current_address %></p></div>
 
       <% if cookies["lat_lng"] == "40.741|-73.9898" %>
-        <%= link_to "refresh to find closest station", root_path %>
-      <% elsif @stas.empty? %>
-        Not close to any citibike stations. Zoom out to see all stations.</br>
+        <p><%= link_to "refresh", root_path %>to find closest stations</p>
       <% else %>
-
         <div class="bs-example">
           <div class="btn-group">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
               Closest Stations <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu">
-              <% @stas.each do |sta| %>
+              <% if !@stas.empty? %>
+                <% @stas.each do |sta| %>
                   <li><strong><%= sta["label"]%></strong></br> (<%= sta.available_bikes %> bikes,  <%= sta.available_docks %> docks)</li>
+                <% end %>
+              <% else %>
+                <li>No active stations nearby</li>
               <% end %>
             </ul>
           </div>
@@ -146,7 +146,7 @@
       <% end %>
 
     <% unless signed_in? %>
-      <%= link_to 'sign in', new_user_session_path %> to view favorite places 
+      <p><%= link_to 'sign in', new_user_session_path %> to view favorite places</p>
     <% end %>
 
     <%= form_for @trip, html: {class: "form-inline"} do |f| %>
