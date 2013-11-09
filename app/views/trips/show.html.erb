@@ -21,8 +21,8 @@
         directionsDisplay.setMap(map);
         directionsDisplay.setPanel(document.getElementById("directions"));
 
-        addMarker(<%=@trip.origin_lat%>, <%=@trip.origin_long%>, "You are here!");
-        addMarker(<%=@trip.destination_lat%>, <%=@trip.destination_long%>, "Final destination")
+        addMarker(<%=@trip.origin_lat%>, <%=@trip.origin_long%>, "YOU ARE HERE", true);
+        addMarker(<%=@trip.destination_lat%>, <%=@trip.destination_long%>, "<%= @trip.destination %>", true)
       } //end initialize
 
       google.maps.event.addDomListener(window,'load',initialize);
@@ -45,9 +45,9 @@
     <% if @orig_sta == nil || @dest_sta == nil %>
       <h4>Citibike is not a good choice for this route</h4>
     <% else %>
-  	  <h4>Closest bike at: <%= @orig_sta["label"] %> (<%= @orig_sta.available_bikes %> bikes available)</h4>
+  	  <h4>Closest Bike: (A) <%= @orig_sta["label"] %> (<%= @orig_sta.available_bikes %> bikes available)</h4>
 
-      <h4>Closest dock at: <%=@dest_sta["label"]%> (<%= @dest_sta.available_docks %> docks available)</h4>
+      <h4>Closest Dock: (B) <%=@dest_sta["label"]%> (<%= @dest_sta.available_docks %> docks available)</h4>
     <% end %>
 
   	<div id="map-canvas" style="width: 700px; height: 900px"/>

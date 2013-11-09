@@ -32,7 +32,9 @@
         map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
         //mark closest station and current location
-        addMarker(<%=@lat%>, <%=@lng%>, "YOU ARE HERE!");   
+        <% unless cookies["lat_lng"] == "40.741|-73.9898" %>
+          addMarker(<%=@lat%>, <%=@lng%>, "YOU ARE HERE", true);
+        <% end %>  
 
         var bikeLayer = new google.maps.BicyclingLayer();
         bikeLayer.setMap(map);

@@ -26,13 +26,9 @@ class PlacesController < ApplicationController
     @d_sta = Trip.find_available_dock(@dest_stas)
   end
 
-=begin not being used
-  def show_station
-    @place = place.new
-    @place.address = 
-    @orig = cookies["lat_lng"]
+  def destroy
+    redirect_to root_path
   end
-=end
 
 private
   def place_params
