@@ -4,7 +4,7 @@ gem 'geocoder'
 gem 'json'
 gem 'citibike'
 gem 'devise'
-gem 'bootstrap-sass', '2.3.2.0'
+#gem 'bootstrap-sass', '2.3.2.0'
 
 #adding this gem screwed up the show/create actions!
 #gem 'protected_attributes'
