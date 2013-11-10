@@ -1932,7 +1932,7 @@ output {
   vertical-align: middle;
   background-color: #ffffff;
   background-image: none;
-  border: 1px solid #cccccc;
+  border: 1px solid #5bc0de;
   border-radius: 4px;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
           box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
@@ -4591,9 +4591,9 @@ textarea.input-group-sm > .input-group-btn > .btn {
 
 .navbar-form {
   padding: 10px 15px;
-  margin-top: 8px;
+  margin-top: 15px;
   margin-right: -15px;
-  margin-bottom: 8px;
+  margin-bottom: 15px;
   margin-left: -15px;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
@@ -5789,7 +5789,7 @@ a.list-group-item.active:focus .list-group-item-text {
 }
 
 .panel-default {
-  border-color: #dddddd;
+  border-color: #428bca;
 }
 
 .panel-default > .panel-heading {
@@ -7094,5 +7094,9 @@ td.visible-print {
   th.hidden-print,
   td.hidden-print {
     display: none !important;
+  }
+
+  .address_div {
+    margin-bottom: 25px;
   }
 }

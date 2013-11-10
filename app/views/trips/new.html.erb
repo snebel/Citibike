@@ -4,12 +4,14 @@
   <head>
     <style type="text/css">
       html { height: 100% }
-      body { height: 100%; margin: 0; text-align: center;
-      header { text-align: left; }
+      body { 
+        height: 100%; 
+        margin: 0; 
+        text-align: center;
+      }
       #map-canvas { 
         height: 100%;
         margin: 0 auto;
-        border: 3px solid black;
       }
     </style>
     
@@ -48,15 +50,19 @@
 
   <body>
     <header>
+    <p class="text-left">
       <% if signed_in? %>
         Signed in as <%= current_user.email %>
-        <%= link_to "sign out", destroy_user_session_path, method: "delete" %>     
+        <%= link_to "sign out", destroy_user_session_path, method: "delete" %>
+      <% else %>
+        <%= link_to "sign in", new_user_session_path %>   
       <% end %>
+    </p>
     </header>
 
     <div class="container">
     <div class="page-header">
-      <h1>CitiBikeBetter<small> a useful map for citibikers</small></h1>
+      <h1>CitibikeBetter<small> a useful map for citibikers</small></h1>
     </div>
 
     <script type="text/javascript">
@@ -64,7 +70,6 @@
       var geocoder;
       var latlng;
       navigator.geolocation.getCurrentPosition(handleGeolocation, handleNoGeolocation);
-
 
       function handleGeolocation(position) {
         var lat = position.coords.latitude;
@@ -107,7 +112,7 @@
       }
     </script>
 
-      <h5><div id="address">Finding current location... <%= @current_address %></div></h5>
+    <h3 class="address_div"><small><div id="address">Finding current location... <%= @current_address %></div></small></h3>
 
     <!-- button logic -->
   <div class="bs-example">
@@ -139,7 +144,7 @@
         <%= f.label :destination, class: "sr-only" %> 
         <%= f.text_field :destination, class: "form-control", placeholder: "Destination" %>
       </div>
-      <%= f.submit "Find Station Directions", class: "btn btn-default" %>
+      <%= f.submit "Find Station Directions", class: "btn btn-info" %>
     <% end %>
   </div>
 

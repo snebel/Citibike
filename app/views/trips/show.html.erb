@@ -1,9 +1,20 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    
+    <style type="text/css">
+      html { height: 100% }
+      body { 
+        height: 100%; 
+        margin: 0; 
+        text-align: center;
+      }
+      #map-canvas { 
+        height: 100%;
+        margin: 0 auto;
+      }
+    </style>
 
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUxuJVuvsR7Fy6J5ZBThZ4zAX79mrFGbI&sensor=true">
@@ -27,7 +38,6 @@
 
       google.maps.event.addDomListener(window,'load',initialize);
 
-
       //show station-station directions
       <% if @orig_sta != nil && @dest_sta != nil %>
         calcRoute("<%= "#{@orig_sta.lat}, #{@orig_sta.long}" %>", "<%= "#{@dest_sta.lat}, #{@dest_sta.long}" %>");
@@ -39,19 +49,75 @@
   </head>
   <body>
   	<header>
-  	  <%= link_to "home", root_path %>  
+  	  <p class="text-left"><%= link_to "home", root_path %></p>
   	</header>
-  	<h3><%= @trip.origin %> to <%= @trip.destination %></h3>
+  <div class="container">
+    <div class="page-header">
+    	<h1><small><%= @trip.origin%> to <%=@trip.destination%></small></h1>
+    </div>
+
     <% if @orig_sta == nil || @dest_sta == nil %>
-      <h4>Citibike is not a good choice for this route</h4>
+    <!-- IF  -->
+      <div class="alert alert-danger">
+        <p class="text-left"><strong>Citibike is not a good choice for this route.</strong> Try searching again</p>
+      </div>
+
+      <div class="navbar-form">
+        <%= form_for @trip, html: {class: "form-inline"} do |f| %>
+        <div class="form-group">
+          <%= f.label :origin, class: "sr-only" %>
+          <%= f.text_field :origin, class: "form-control", placeholder: "Origin" %>
+        </div>
+        <div class="form-group">
+          <%= f.label :destination, class: "sr-only" %> 
+          <%= f.text_field :destination, class: "form-control", placeholder: "Destination" %>
+        </div>
+          <%= f.submit "Change this Trip", class: "btn btn-info" %>
+        <% end %>
+      </div>
     <% else %>
+    <!-- ELSE -->
+
+      <table class="table">
+        <tr>
+          <td>Closest Bike (A)</td>
+          <!--<td>Closest Bike:</td>-->
+          <td><%= @orig_sta["label"] %></td>
+          <td><%= @orig_sta.available_bikes %> bikes available</td>
+        <tr>
+        <tr>
+          <td>Closest Dock (B)</td>
+          <!--<td>Closest Dock:</td>-->
+          <td><%=@dest_sta["label"]%></td>
+          <td><%= @dest_sta.available_docks %> docks available</td>
+        </tr>
+      </table>
+
   	  <h4>Closest Bike: (A) <%= @orig_sta["label"] %> (<%= @orig_sta.available_bikes %> bikes available)</h4>
 
       <h4>Closest Dock: (B) <%=@dest_sta["label"]%> (<%= @dest_sta.available_docks %> docks available)</h4>
-    <% end %>
 
-  	<div id="map-canvas" style="width: 700px; height: 900px"/>
-  	</div>
-  	
+      <div class="navbar-form">
+        <%= form_for @new_trip, html: {class: "form-inline"} do |f| %>
+        <div class="form-group">
+          <%= f.label :origin, class: "sr-only" %>
+          <%= f.text_field :origin, class: "form-control", placeholder: "Origin" %>
+        </div>
+        <div class="form-group">
+          <%= f.label :destination, class: "sr-only" %> 
+          <%= f.text_field :destination, class: "form-control", placeholder: "Destination" %>
+        </div>
+          <%= f.submit "New Station Directions", class: "btn btn-info" %>
+        <% end %>
+
+      </div>
+    <% end %>
+    <!-- END IF ELSE -->
+
+    <div class="panel panel-default">
+  	  <div class="panel-body" id="map-canvas" style="height: 700px"/></div>
+    </div>
+
+  </div>
   </body>
 </html>
