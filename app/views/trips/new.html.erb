@@ -45,6 +45,7 @@
           if (status == google.maps.GeocoderStatus.OK) {
             current_address = results[0].formatted_address;
             $("#address").html("Current Location (approximate): " + current_address);
+            reinitialize(latitude, longitude);
           }
           else {
             $("#address").html("Geocoder failed due to: " + status);
@@ -90,6 +91,35 @@
           addMarker(<%= sta["latitude"] %>, <%= sta["longitude"] %>, "Bikes: <%= sta["availableBikes"] %> Docks: <%= sta["availableDocks"] %> <%=sta["label"]%>")
         <% end %> 
       } //end initialize
+
+
+
+
+      function reinitialize(latitude, longitude) {
+        var mapOptions = {
+          center: new google.maps.LatLng(latitude, longitude),
+          zoom: <%= @zoom %>,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+          }; 
+
+        map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
+        //mark closest station and current location
+          addMarker(latitude, longitude, "YOU ARE HERE", true);
+
+        var bikeLayer = new google.maps.BicyclingLayer();
+        bikeLayer.setMap(map);
+
+        //add station markers
+        <% get_stations.each do |sta| %>
+          addMarker(<%= sta["latitude"] %>, <%= sta["longitude"] %>, "Bikes: <%= sta["availableBikes"] %> Docks: <%= sta["availableDocks"] %> <%=sta["label"]%>")
+        <% end %> 
+      } //end reinitialize
+
+
+
+
+
 
       google.maps.event.addDomListener(window,'load',initialize);
     </script>
