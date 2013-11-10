@@ -40,10 +40,18 @@ function addMarker(lat, lng, status, open) {
   if (open) { infowindow.open(map, marker); }
 }
 
-/*
-function handleNoGeolocation(errorFlag) {
-  alert("Your browser's locations settings are off. Features that use your current location won't work.");
+function handleNoGeolocation(error) {
+  switch(error.code)
+  {
+    case error.PERMISSION_DENIED:
+      return "User denied the request for Geolocation.";
+    case error.POSITION_UNAVAILABLE:
+      return "Location information is unavailable.";
+    case error.TIMEOUT:
+      return "The request to get user location timed out.";
+    case error.UNKNOWN_ERROR:
+      return "An unknown error occurred.";
+  }
 }
-*/
 
 

@@ -34,7 +34,6 @@
         document.cookie = "lat_lng=" + escape(cookie_val);
         var la;
         setAddress(lat, lng);
-        //setStation();
       };
 
       function setAddress(latitude, longitude) {
@@ -45,26 +44,14 @@
           if (status == google.maps.GeocoderStatus.OK) {
             current_address = results[0].formatted_address;
             $("#address").html("Current Location (approximate): " + current_address);
-            reinitialize(latitude, longitude);
+            //if user has moved locations
+            if (document.cookie != "request_method=GET; lat_lng=" + latitude + "%7C" + longitude)
+              { reinitialize(latitude, longitude); }
           }
           else {
             $("#address").html("Geocoder failed due to: " + status);
           }
         });
-      }
-
-      function handleNoGeolocation(error) {
-        switch(error.code)
-        {
-          case error.PERMISSION_DENIED:
-            return "User denied the request for Geolocation.";
-          case error.POSITION_UNAVAILABLE:
-            return "Location information is unavailable.";
-          case error.TIMEOUT:
-            return "The request to get user location timed out.";
-          case error.UNKNOWN_ERROR:
-            return "An unknown error occurred.";
-        }
       }
     </script>
 
@@ -92,13 +79,10 @@
         <% end %> 
       } //end initialize
 
-
-
-
       function reinitialize(latitude, longitude) {
         var mapOptions = {
           center: new google.maps.LatLng(latitude, longitude),
-          zoom: <%= @zoom %>,
+          zoom: 16,
           mapTypeId: google.maps.MapTypeId.ROADMAP
           }; 
 
@@ -116,12 +100,8 @@
         <% end %> 
       } //end reinitialize
 
-
-
-
-
-
       google.maps.event.addDomListener(window,'load',initialize);
+
     </script>
   </head>
 
@@ -137,82 +117,37 @@
     </p>
     </header>
 
-    <div class="container">
+  <div class="container">
     <div class="page-header">
       <h1>CitibikeBetter<small> a useful map for citibikers</small></h1>
     </div>
-
-    <!--
-    <script type="text/javascript">
-    //GEOLOCATION
-      var geocoder;
-      var latlng;
-      navigator.geolocation.getCurrentPosition(handleGeolocation, handleNoGeolocation);
-
-      function handleGeolocation(position) {
-        var lat = position.coords.latitude;
-        var lng = position.coords.longitude;
-
-        var cookie_val = lat + "|" + lng;
-        document.cookie = "lat_lng=" + escape(cookie_val);
-        var la;
-        setAddress(lat, lng);
-        //setStation();
-      };
-
-      function setAddress(latitude, longitude) {
-        geocoder = new google.maps.Geocoder();
-        latlng = new google.maps.LatLng(latitude, longitude);
-
-        result = geocoder.geocode({'latLng': latlng}, function(results, status) {
-          if (status == google.maps.GeocoderStatus.OK) {
-            current_address = results[0].formatted_address;
-            $("#address").html("Current Location (approximate): " + current_address);
-          }
-          else {
-            $("#address").html("Geocoder failed due to: " + status);
-          }
-        });
-      }
-
-      function handleNoGeolocation(error) {
-        switch(error.code)
-        {
-          case error.PERMISSION_DENIED:
-            return "User denied the request for Geolocation.";
-          case error.POSITION_UNAVAILABLE:
-            return "Location information is unavailable.";
-          case error.TIMEOUT:
-            return "The request to get user location timed out.";
-          case error.UNKNOWN_ERROR:
-            return "An unknown error occurred.";
-        }
-      }
-    </script>
-    -->
 
 
     <h3 class="address_div"><small><div id="address">Finding current location... <%= @current_address %></div></small></h3>
 
     <!-- button logic -->
-  <div class="bs-example">
-    <!-- default cookies value -->
-    <% if cookies["lat_lng"] == "40.741|-73.9898" %>
-        <%= render 'shared/find_stations_btn' %>
-      <% if signed_in? %>
-        <%= render 'shared/show_places_btn' %>
+    <div class="bs-example">
+     <!-- default cookies value -->
+     <% if cookies["lat_lng"] == "40.741|-73.9898" %>
+          <%= render 'shared/find_stations_btn' %>
+
+        <% if signed_in? %>
+          <%= render 'shared/show_places_btn' %>
+        <% else %>
+         <%= render 'shared/get_places_btn' %>
+        <% end %>
+
       <% else %>
-        <%= render 'shared/get_places_btn' %>
+       <%= render 'shared/show_stations_btn' %>
+
+       <% if signed_in? %>
+         <%= render 'shared/show_places_btn' %>
+        <% else %>
+          <%= render 'shared/get_places_btn' %>
+        <% end %>
+
       <% end %>
-    <% else %>
-      <%= render 'shared/show_stations_btn' %>
-      <% if signed_in? %>
-        <%= render 'shared/show_places_btn' %>
-      <% else %>
-        <%= render 'shared/get_places_btn' %>
-      <% end %>
-    <% end %>
-  </div>
+    </div>
 
   <div class="navbar-form">
     <%= form_for @trip, html: {class: "form-inline"} do |f| %>
@@ -232,11 +167,7 @@
   <div class="panel panel-default">
     <div class="panel-body" id="map-canvas" style="height: 600px"></div>
   </div>
-    
 
-    <footer>
-      <p></p>
-    </footer>
   </div>
   </body>
 </html>
