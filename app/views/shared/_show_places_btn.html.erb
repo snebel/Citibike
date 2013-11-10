@@ -4,7 +4,7 @@
   </button>
   <ul class="dropdown-menu" role="menu">
     <% current_user.places.each do |place| %>
-      <li><h5><%= link_to place.name, place, 'data-no-turbolink' => true %></h5></li>
+      <li><h5><%= link_to place.name, place%></h5></li>
     <% end %>
     <li class="divider"></li>
     <li><h6><%= link_to 'add new place', new_place_path %><h6></li>
