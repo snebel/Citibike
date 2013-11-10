@@ -45,7 +45,7 @@
             current_address = results[0].formatted_address;
             $("#address").html("Current Location (approximate): " + current_address);
             //if user has moved locations
-            if (document.cookie != "request_method=GET; lat_lng=" + latitude + "%7C" + longitude)
+            if (document.cookie != "lat_lng=" + latitude + "%7C" + longitude)
               { reinitialize(latitude, longitude); }
           }
           else {
