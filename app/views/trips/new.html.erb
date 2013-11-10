@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <style type="text/css">
       html { height: 100% }
@@ -15,14 +15,12 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     
-
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUxuJVuvsR7Fy6J5ZBThZ4zAX79mrFGbI&amp;sensor=true&callback=initialize">
     </script>
 
     <script type="text/javascript">
       function initialize() {
         var mapOptions = {
-          //center: new google.maps.LatLng(40.741, -73.9898),
           center: new google.maps.LatLng(<%=@lat%>, <%=@lng%>),
           zoom: <%= @zoom %>,
           mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -51,13 +49,15 @@
   <body>
     <header>
       <% if signed_in? %>
-        <p>Signed in as <%= current_user.email %>
-        <%= link_to "sign out", destroy_user_session_path, method: "delete" %></p>      
+        Signed in as <%= current_user.email %>
+        <%= link_to "sign out", destroy_user_session_path, method: "delete" %>     
       <% end %>
     </header>
 
     <div class="container">
-    <h1>Welcome to CitiBikeBetter</h1>
+    <div class="page-header">
+      <h1>CitiBikeBetter<small> a useful map for citibikers</small></h1>
+    </div>
 
     <script type="text/javascript">
     //GEOLOCATION
@@ -107,48 +107,29 @@
       }
     </script>
 
-      <div id="address"><p>Finding current location... <%= @current_address %></p></div>
+      <h5><div id="address">Finding current location... <%= @current_address %></div></h5>
 
-      <% if cookies["lat_lng"] == "40.741|-73.9898" %>
-        <p><%= link_to "refresh", root_path %> to find closest stations</p>
+    <!-- button logic -->
+  <div class="bs-example">
+    <!-- default cookies value -->
+    <% if cookies["lat_lng"] == "40.741|-73.9898" %>
+        <%= render 'shared/find_stations_btn' %>
+      <% if signed_in? %>
+        <%= render 'shared/show_places_btn' %>
       <% else %>
-        <div class="bs-example">
-          <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-              Closest Stations <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-              <% if !@stas.empty? %>
-                <% @stas.each do |sta| %>
-                  <li><strong><%= sta["label"]%></strong></br> (<%= sta.available_bikes %> bikes,  <%= sta.available_docks %> docks)</li>
-                <% end %>
-              <% else %>
-                <li>No active stations nearby</li>
-              <% end %>
-            </ul>
-          </div>
-
-          <% if signed_in? %>
-          <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-              Favorite Places <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-              <% current_user.places.each do |place| %>
-                <li><%= link_to place.name, place, 'data-no-turbolink' => true %></li>
-              <% end %>
-              <li class="divider"></li>
-              <li><%= link_to 'add new place', new_place_path %></li>
-            </ul>
-          </div>
-          <% end %>
-        </div>
+        <%= render 'shared/get_places_btn' %>
       <% end %>
-
-    <% unless signed_in? %>
-      <p><%= link_to 'sign in', new_user_session_path %> to view favorite places</p>
+    <% else %>
+      <%= render 'shared/show_stations_btn' %>
+      <% if signed_in? %>
+        <%= render 'shared/show_places_btn' %>
+      <% else %>
+        <%= render 'shared/get_places_btn' %>
+      <% end %>
     <% end %>
+  </div>
 
+  <div class="navbar-form">
     <%= form_for @trip, html: {class: "form-inline"} do |f| %>
       <div class="form-group">
         <%= f.label :origin, class: "sr-only" %>
@@ -160,8 +141,13 @@
       </div>
       <%= f.submit "Find Station Directions", class: "btn btn-default" %>
     <% end %>
+  </div>
 
-    <div id="map-canvas" style="width: 700px; height: 700px"/>
+
+  <div class="panel panel-default">
+    <div class="panel-body" id="map-canvas" style="height: 600px"></div>
+  </div>
+    
 
     <footer>
       <p></p>

@@ -1,0 +1,14 @@
+<div class="btn-group">
+  <button type="button" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown">
+    <h5>Closest Stations <span class="badge"> <%=@stas.size%> <span class="caret"></span></h5>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+  <% if !@stas.empty? %>
+    <% @stas.each do |sta| %>
+      <li><h5><strong><%= sta["label"]%></strong></br> (<%= sta.available_bikes %> bikes,  <%= sta.available_docks %> docks)</h5></li>
+    <% end %>
+  <% else %>
+    <li><h6>No active stations nearby</h6></li>
+  <% end %>
+  </ul>
+</div>
