@@ -21,6 +21,53 @@
     </script>
 
     <script type="text/javascript">
+    //GEOLOCATION
+      var geocoder;
+      var latlng;
+      navigator.geolocation.getCurrentPosition(handleGeolocation, handleNoGeolocation);
+
+      function handleGeolocation(position) {
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+
+        var cookie_val = lat + "|" + lng;
+        document.cookie = "lat_lng=" + escape(cookie_val);
+        var la;
+        setAddress(lat, lng);
+        //setStation();
+      };
+
+      function setAddress(latitude, longitude) {
+        geocoder = new google.maps.Geocoder();
+        latlng = new google.maps.LatLng(latitude, longitude);
+
+        result = geocoder.geocode({'latLng': latlng}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            current_address = results[0].formatted_address;
+            $("#address").html("Current Location (approximate): " + current_address);
+          }
+          else {
+            $("#address").html("Geocoder failed due to: " + status);
+          }
+        });
+      }
+
+      function handleNoGeolocation(error) {
+        switch(error.code)
+        {
+          case error.PERMISSION_DENIED:
+            return "User denied the request for Geolocation.";
+          case error.POSITION_UNAVAILABLE:
+            return "Location information is unavailable.";
+          case error.TIMEOUT:
+            return "The request to get user location timed out.";
+          case error.UNKNOWN_ERROR:
+            return "An unknown error occurred.";
+        }
+      }
+    </script>
+
+    <script type="text/javascript">
       function initialize() {
         var mapOptions = {
           center: new google.maps.LatLng(<%=@lat%>, <%=@lng%>),
@@ -65,6 +112,7 @@
       <h1>CitibikeBetter<small> a useful map for citibikers</small></h1>
     </div>
 
+    <!--
     <script type="text/javascript">
     //GEOLOCATION
       var geocoder;
@@ -111,6 +159,8 @@
         }
       }
     </script>
+    -->
+
 
     <h3 class="address_div"><small><div id="address">Finding current location... <%= @current_address %></div></small></h3>
 
