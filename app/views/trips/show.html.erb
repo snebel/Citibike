@@ -78,29 +78,24 @@
 
       <div class="panel panel-info">
         <div class="panel-heading">
-          <h4><%= @trip.origin%> to <%=@trip.destination%></h4>
+          <h4 class="panel-title"><%= @trip.origin%> <small> to </small> <%=@trip.destination%></h4>
         </div>
-
-      <table class="table table-hover">
-        <tr class="success">
-          <td>Get bike from (A)</td>
-          <!--<td>Closest Bike:</td>-->
-          <td><%= @orig_sta["label"] %></td>
-          <td><%= @orig_sta.available_bikes %> bikes available</td>
-        </tr>
-        <tr class="danger">
-          <td>Park bike at (B)</td>
-          <!--<td>Closest Dock:</td>-->
-          <td><%=@dest_sta["label"]%></td>
-          <td><%= @dest_sta.available_docks %> docks available</td>
-        </tr>
-      </table>
+        <table class="table table-hover">
+          <tr class="">
+            <td>Get bike from (A)</td>
+            <!--<td>Closest Bike:</td>-->
+            <td><%= @orig_sta["label"] %></td>
+            <td><%= @orig_sta.available_bikes %> bikes available</td>
+          </tr>
+          <tr class="">
+            <td>Park bike at (B)</td>
+            <!--<td>Closest Dock:</td>-->
+            <td><%=@dest_sta["label"]%></td>
+            <td><%= @dest_sta.available_docks %> docks available</td>
+          </tr>
+        </table>
       </div>
-      <!--
-  	  <h4>Closest Bike: (A) <%= @orig_sta["label"] %> (<%= @orig_sta.available_bikes %> bikes available)</h4>
 
-      <h4>Closest Dock: (B) <%=@dest_sta["label"]%> (<%= @dest_sta.available_docks %> docks available)</h4>
-      -->
 
       <div class="navbar-form">
         <%= form_for @new_trip, html: {class: "form-inline"} do |f| %>
