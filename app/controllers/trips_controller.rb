@@ -30,7 +30,6 @@ class TripsController < ApplicationController
 
   def create
   	@trip = Trip.new(trip_params)
-  	#@trip.save ? redirect_to @trip : render :new
     if @trip.save
       redirect_to @trip
     else

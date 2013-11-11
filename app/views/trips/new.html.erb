@@ -45,13 +45,16 @@
           if (status == google.maps.GeocoderStatus.OK) {
             current_address = results[0].formatted_address;
             $("#address").html("Current Location (approximate): " + current_address);
+            
             //if user has moved locations
-            var str = document.cookie;
-            var start = str.search("lat_lng");
-            var end = str.length;
-            str = str.slice(start, end);
-            //alert(str);
-            if (str != "lat_lng=" + latitude + "%7C" + longitude)
+            //var str = document.cookie;
+            var start = document.cookie.search("lat_lng");
+            var end = document.cookie.length;
+            var str = document.cookie.slice(start, end);
+
+            alert("str: "+str+", "+"lat_lng=" + latitude + "%7C" + longitude);
+
+            if (str == "lat_lng=" + latitude + "%7C" + longitude)
               { reinitialize(latitude, longitude); }
           }
           else {
