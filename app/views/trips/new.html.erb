@@ -8,6 +8,7 @@
         height: 100%; 
         margin: 0; 
         text-align: center;
+        padding-top: 50px;
       }
       #map-canvas { 
         height: 100%;
@@ -111,21 +112,105 @@
   </head>
 
   <body>
+
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="">CBB</a>
+      </div>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <% if cookies["lat_lng"] == "40.741|-73.9898" %>
+            <li><a href="/">Find Stations</a></li>
+            <% if signed_in? %>
+              <li class="dropdown active"><a class="dropdown-toggle" data-toggle="dropdown">Favorite Places <span class="badge"> <%=@stas.size%> <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <% current_user.places.each do |place| %>
+                    <li><h5><%= link_to place.name, place%></h5></li>
+                  <% end %>
+                  <li class="divider"></li>
+                  <li><h6><%= link_to 'add new place', new_place_path %><h6></li>
+                </ul>
+              </li>
+            <% else %>
+              <li><a href="/users/sign_in">Favorite Places</a></li>
+            <% end %>
+          <% else %>
+            <li class="dropdown active"><a class="dropdown-toggle" data-toggle="dropdown">Nearby Stations <span class="badge"> <%=@stas.size%> <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <% if !@stas.empty? %>
+                  <% @stas.each do |sta| %>
+                    <li><a ><h5><%= sta["label"]%></br><h4><small><%= sta.available_bikes %> bikes,  <%= sta.available_docks %> docks</small></h4></a></li>
+                  <% end %>
+                <% else %>
+                  <li><h6>No active stations nearby</h6></li>
+                <% end %>
+              </ul>
+
+            <% if signed_in? %>
+              <li class="dropdown active"><a class="dropdown-toggle" data-toggle="dropdown">Favorite Places <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <% current_user.places.each do |place| %>
+                    <li><h5><%= link_to place.name, place%></h5></li>
+                  <% end %>
+                  <li class="divider"></li>
+                  <li><h6><%= link_to 'add new place', new_place_path %><h6></li>
+                </ul>
+              </li>
+            <% else %>
+              <li><a href="/users/sign_in">Favorite Places</a></li>
+            <% end %>
+
+          <% end %>
+
+          <li>
+            <% if signed_in? %>
+              <%= link_to "sign out", destroy_user_session_path, method: "delete" %>
+            <% else %>
+              <%= link_to "sign in", new_user_session_path %>   
+            <% end %>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+
+    <div class="container">
+
     <header>
-    <p class="text-left">
+      <!--
+      <p class="text-left">
       <% if signed_in? %>
-        Signed in as <%= current_user.email %>
-        <%= link_to "sign out", destroy_user_session_path, method: "delete" %>
+        <%= current_user.email %> <%= link_to "sign out", destroy_user_session_path, method: "delete" %>
       <% else %>
         <%= link_to "sign in", new_user_session_path %>   
-      <% end %>
-    </p>
+      <% end %> </p>
+      -->
+
+      <h1>CitibikeBetter<small> a useful map for citibikers</small></h1>
     </header>
 
-  <div class="container">
-    <div class="page-header">
-      <h1>CitibikeBetter<small> a useful map for citibikers</small></h1>
-    </div>
+    <div class="navbar-form">
+    <%= form_for @trip, html: {class: "form-inline"} do |f| %>
+      <div class="form-group">
+        <%= f.label :origin, class: "sr-only" %>
+        <%= f.text_field :origin, class: "form-control", placeholder: "Origin" %>
+      </div>
+      <div class="form-group ">
+        <%= f.label :destination, class: "sr-only" %> 
+        <%= f.text_field :destination, class: "form-control", placeholder: "Destination" %>
+      </div>
+      <%= f.submit "Find Station Directions", class: "btn btn-info " %>
+    <% end %>
+  </div>
 
 
     <h3 class="address_div"><small><div id="address">Finding current location... <%= @current_address %></div></small></h3>
@@ -154,19 +239,9 @@
       <% end %>
     </div>
 
-  <div class="navbar-form">
-    <%= form_for @trip, html: {class: "form-inline"} do |f| %>
-      <div class="form-group">
-        <%= f.label :origin, class: "sr-only" %>
-        <%= f.text_field :origin, class: "form-control", placeholder: "Origin" %>
-      </div>
-      <div class="form-group">
-        <%= f.label :destination, class: "sr-only" %> 
-        <%= f.text_field :destination, class: "form-control", placeholder: "Destination" %>
-      </div>
-      <%= f.submit "Find Station Directions", class: "btn btn-info" %>
-    <% end %>
-  </div>
+  
+  
+  
 
 
   <div class="panel panel-default">
