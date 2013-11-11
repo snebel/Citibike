@@ -49,10 +49,8 @@
             var start = str.search("lat_lng");
             var end = str.length;
             str = str.slice(start, end);
-
-            alert(str);
+            //alert(str);
             if (str != "lat_lng=" + latitude + "%7C" + longitude)
-              //"lat_lng=" + latitude + "%7C" + longitude)
               { reinitialize(latitude, longitude); }
           }
           else {
