@@ -33,8 +33,10 @@
         directionsDisplay.setMap(map);
         directionsDisplay.setPanel(document.getElementById("directions"));
 
-        addMarker(<%=@trip.origin_lat%>, <%=@trip.origin_long%>, "<%= @trip.origin %>", true);
-        addMarker(<%=@trip.destination_lat%>, <%=@trip.destination_long%>, "<%= @trip.destination %>", true)
+        <% unless @orig_sta == nil || @dest_sta == nil %>
+          addMarker(<%=@trip.origin_lat%>, <%=@trip.origin_long%>, "<%= @trip.origin %>", true);
+          addMarker(<%=@trip.destination_lat%>, <%=@trip.destination_long%>, "<%= @trip.destination %>", true)
+        <% end %>
       } //end initialize
 
       google.maps.event.addDomListener(window,'load',initialize);
@@ -72,36 +74,22 @@
         </div>
         <table class="table table-hover">
           <tr class="">
-            <td>Closest Bike - station (A)</td>
+            <td>Closest Bike <b class="text-success">(A)</b></td>
             <!--<td>Closest Bike:</td>-->
-            <td><%= @orig_sta["label"] %></td>
+            <td><p class="text-success"><strong><%= @orig_sta["label"] %></strong></p></td>
             <td><%= @orig_sta.available_bikes %> bikes available</td>
           </tr>
           <tr class="">
-            <td>Closest Dock - station (B)</td>
+            <td>Closest Dock <strong class="text-danger">(B)</strong></td>
             <!--<td>Closest Dock:</td>-->
-            <td><%=@dest_sta["label"]%></td>
+            <td><p class="text-danger"><strong><%=@dest_sta["label"]%></strong></p></td>
             <td><%= @dest_sta.available_docks %> docks available</td>
           </tr>
         </table>
       </div>
       </div>
     </div>
-      <!--
-      <div class="navbar-form">
-        <%= form_for @new_trip, html: {class: "form-inline"} do |f| %>
-        <div class="form-group">
-          <%= f.label :origin, class: "sr-only" %>
-          <%= f.text_field :origin, class: "form-control", placeholder: "Origin" %>
-        </div>
-        <div class="form-group">
-          <%= f.label :destination, class: "sr-only" %> 
-          <%= f.text_field :destination, class: "form-control", placeholder: "Destination" %>
-        </div>
-          <%= f.submit "New Station Directions", class: "btn btn-info" %>
-        <% end %>
-      </div>
-      -->
+ 
     <% end %>
     <!-- END IF ELSE -->
 

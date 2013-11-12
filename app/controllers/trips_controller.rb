@@ -46,7 +46,6 @@ class TripsController < ApplicationController
     @dest_stations = Trip.find_closest_stations(
                 @trip.destination_lat, @trip.destination_long)
     @dest_sta = Trip.find_available_dock(@dest_stations)
-    @new_trip = Trip.new
   end
 
   def update

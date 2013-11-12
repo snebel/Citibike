@@ -38,10 +38,12 @@
 
         directionsDisplay.setMap(map);
         //directionsDisplay.setPanel(document.getElementById("directions"));
-        alert('<%=@orig%>' + "\n"+"\n"+ '<%=cookies["lat_lng"]%>');
+        //alert('<%=@orig%>' + "\n"+"\n"+ '<%=cookies["lat_lng"]%>');
 
-        addMarker(<%= @lat %>, <%= @lng %>, "You are here", true);
-        addMarker(<%=@place.lat%>, <%=@place.lng%>, "<%=@place.address%>", true);
+        <% unless @o_sta == nil || @d_sta == nil %>
+          addMarker(<%= @lat %>, <%= @lng %>, "You are here", true);
+          addMarker(<%=@place.lat%>, <%=@place.lng%>, "<%=@place.address%>", true);
+        <% end %>
       } //end initialize
       
       google.maps.event.addDomListener(window,'load',initialize);
@@ -64,7 +66,7 @@
   
     <% if @o_sta == nil || @d_sta == nil %>
       <div class="alert alert-danger">
-        <p class="text-left"><strong>Citibike is not</strong> a good choice for this route. You can <strong>Edit</strong> or <strong>delete</strong> this place below</p>
+        <p class="text-left"><strong>Citibike is not</strong> a good way to get from <strong>(A)</strong> your current location to <strong>(B)</strong> <%= @place.name %>. Edit or delete this place below.</p>
       </div>
     <% else %>
 
@@ -76,13 +78,13 @@
             </div>
             <table class="table table-hover">
               <tr>
-                <td>Closest Bike - Station (A)</td>
-                <td><%= @o_sta["label"] %></td>
+                <td>Closest Bike <b class="text-success">(A)</b></td>
+                <td><b class="text-success"><%= @o_sta["label"] %></b></td>
                 <td><%= @o_sta["availableBikes"] %> bikes available</td>
               </tr>
               <tr>
-                <td>Closest Dock - Station (B)</td>
-                <td><%= @d_sta["label"] %></td>
+                <td>Closest Dock <b class="text-danger">(B)</b></td>
+                <td><b class="text-danger"><%= @d_sta["label"] %></b></td>
                 <td><%= @d_sta["availableDocks"] %> docks available</td>
               </tr>
             </table>
