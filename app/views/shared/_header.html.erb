@@ -1,0 +1,41 @@
+  
+  <style>
+    h1 { 
+      padding-bottom: 10px;
+      padding-left: 15px;
+    }
+  </style>
+
+
+
+  <header>
+    <nav class="navbar navbar-default" role="navigation">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <h1 class="text-primary">CitibikeBetter<small> a useful map for citibikers</small></h1>
+      </div>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/">Home</a></li>
+          <li>
+            <% if signed_in? %>
+              <%= link_to "Sign out", destroy_user_session_path, method: "delete" %>
+            <% else %>
+              <%= link_to "Sign in", new_user_session_path %>   
+            <% end %>
+            
+          </li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </nav>
+  </header>

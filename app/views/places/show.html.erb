@@ -10,6 +10,7 @@
         height: 100%; 
         margin: 0; 
         text-align: center;
+        margin-top: 20px;
       }
       #map-canvas { 
         height: 100%;
@@ -55,14 +56,15 @@
 
   </head>
   <body>
+    <div class="container">
   	<header>
-  	  <p class="text-left"><%= link_to "home", root_path %></p>
+  	  <%= render 'shared/header' %>
   	</header>
 
-  <div class="container">
+  
     <% if @o_sta == nil || @d_sta == nil %>
       <div class="alert alert-danger">
-        <p class="text-left"><strong>Citibike is not a good way</strong> to get to <%=@place.name%> from your current location.</br>Edit or delete this place below</p>
+        <p class="text-left"><strong>Citibike is not</strong> a good choice for this route. You can <strong>Edit</strong> or <strong>delete</strong> this place below</p>
       </div>
     <% else %>
 
@@ -94,7 +96,7 @@
       <div class="panel-body" id="map-canvas" style="height: 600px"/></div>
     </div>
 
-    <h3><small>Not the place you wanted? Change the fields below or delete it from your favorites</small></h3>
+    <h3><small>Not the place you wanted? Edit or delete it from your favorites</small></h3>
     <div class="navbar-form">
       <%= form_for @place, html: {class: "form-inline"} do |f| %>
         <div class="form-group has-warning">

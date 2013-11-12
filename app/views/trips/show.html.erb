@@ -9,11 +9,13 @@
         height: 100%; 
         margin: 0; 
         text-align: center;
+        margin-top: 20px;
       }
       #map-canvas { 
         height: 100%;
         margin: 0 auto;
       }
+
     </style>
 
     <script type="text/javascript"
@@ -43,42 +45,30 @@
       <% else %>
         calcRoute("<%= @trip.origin %>", "<%= @trip.destination %>");
       <% end %>
-
     </script>
   </head>
+
   <body>
+    <div class="container">
   	<header>
-  	  <p class="text-left"><%= link_to "home", root_path %></p>
+  	  <%= render 'shared/header' %>
   	</header>
-  <div class="container">
+  
     <% if @orig_sta == nil || @dest_sta == nil %>
     <!-- IF  -->
       <div class="alert alert-danger">
         <p class="text-left"><strong>Citibike is not a good choice for this route.</strong> Try searching again</p>
       </div>
 
-      <div class="navbar-form">
-        <%= form_for @trip, html: {class: "form-inline"} do |f| %>
-        <div class="form-group">
-          <%= f.label :origin, class: "sr-only" %>
-          <%= f.text_field :origin, class: "form-control", placeholder: "Origin" %>
-        </div>
-        <div class="form-group">
-          <%= f.label :destination, class: "sr-only" %> 
-          <%= f.text_field :destination, class: "form-control", placeholder: "Destination" %>
-        </div>
-          <%= f.submit "Change this Trip", class: "btn btn-info" %>
-        <% end %>
-      </div>
+
     <% else %>
     <!-- ELSE -->
 
     <div class="row">
       <div class="col-sm-8 col-sm-offset-2">
-      <div class="col-sm-8 col-sm-offset-2">
       <div class="panel panel-primary">
         <div class="panel-heading">
-          <h1 class="panel-title"><%= @trip.origin%> <small>to</small> <%=@trip.destination%></h1>
+          <h3 class="panel-title"><%= @trip.origin%> <small>to</small> <%=@trip.destination%></h3>
         </div>
         <table class="table table-hover">
           <tr class="">
@@ -97,7 +87,7 @@
       </div>
       </div>
     </div>
-
+      <!--
       <div class="navbar-form">
         <%= form_for @new_trip, html: {class: "form-inline"} do |f| %>
         <div class="form-group">
@@ -111,11 +101,30 @@
           <%= f.submit "New Station Directions", class: "btn btn-info" %>
         <% end %>
       </div>
+      -->
     <% end %>
     <!-- END IF ELSE -->
+
     <div class="panel panel-default">
   	  <div class="panel-body" id="map-canvas" style="height: 600px"/></div>
     </div>
+
+    <h3><small>Not the trip you wanted? Try searching again</small></h3>
+
+    <div class="navbar-form">
+      <%= form_for @trip, html: {class: "form-inline"} do |f| %>
+      <div class="form-group">
+        <%= f.label :origin, class: "sr-only" %>
+        <%= f.text_field :origin, class: "form-control", placeholder: "Origin" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :destination, class: "sr-only" %> 
+        <%= f.text_field :destination, class: "form-control", placeholder: "Destination" %>
+      </div>
+        <%= f.submit "Adjust Trip", class: "btn btn-info" %>
+      <% end %>
+    </div>
+    <p>-</p>
   </div>
   </body>
 </html>
