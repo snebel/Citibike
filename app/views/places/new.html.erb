@@ -1,7 +1,45 @@
-<%= form_for @place do |f| %>
-  <%= f.label :name %>
-  <%= f.text_field :name %> 
-  <%= f.label :address %> 
-  <%= f.text_field :address %> 
-  <%= f.submit "Add to My Favorites" %>
-<% end %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      html { height: 100% }
+      body { 
+        height: 100%; 
+        margin: 0; 
+        text-align: center;
+        padding-top: 70px;
+      }
+    </style>
+  </head>
+
+<body>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
+        <div class="panel panel-warning">
+          <div class="panel-heading">
+            <h3 class="panel-title">Add a New Place</h3>
+          </div>
+          <div class="panel-body">
+            <%= form_for @place, role: "form" do |f| %>
+              <fieldset>
+                <div class="form-group has-warning">
+                  <%= f.label :name, class: "sr-only" %>
+                  <%= f.text_field :name, class: "form-control", placeholder: "What's this place called?" %>
+                </div>
+                <div class="form-group has-warning">
+                  <%= f.label :address, class: "sr-only" %>
+                  <%= f.text_field :address, class: "form-control", placeholder: "What's this places address?" %>  
+                </div>
+                <%= f.submit "Add to Favorites", class: "btn btn-warning btn-lg btn-block" %>
+              </fieldset>
+            <% end %>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -32,7 +32,7 @@
         var lng = position.coords.longitude;
 
         var cookie_val = lat + "|" + lng;
-        document.cookie = "lat_lng=" + escape(cookie_val);
+        document.cookie = "lat_lng=" + escape(cookie_val); path = '/places';
         var la;
         setAddress(lat, lng);
       };
@@ -51,10 +51,10 @@
             var start = document.cookie.search("lat_lng");
             var end = document.cookie.length;
             var str = document.cookie.slice(start, end);
-
-            alert("str: "+str+", "+"lat_lng=" + latitude + "%7C" + longitude);
-
-            if (str == "lat_lng=" + latitude + "%7C" + longitude)
+            //alert("\n"+ '<%=cookies["lat_lng"]%>');
+            //alert("str: "+str+", "+"lat_lng=" + latitude + "%7C" + longitude);
+            //unless (str == "lat_lng=" + latitude + "%7C" + longitude || not a new session )
+            //if (str == "lat_lng=" + latitude + "%7C" + longitude)
               { reinitialize(latitude, longitude); }
           }
           else {
@@ -134,7 +134,7 @@
           <% if cookies["lat_lng"] == "40.741|-73.9898" %>
             <li><a href="/">Find Stations</a></li>
             <% if signed_in? %>
-              <li class="dropdown active"><a class="dropdown-toggle" data-toggle="dropdown">Favorite Places <span class="badge"> <%=@stas.size%> <span class="caret"></span></a>
+              <li class="dropdown active"><a class="dropdown-toggle" data-toggle="dropdown">Favorite Places <span class="badge"> <%=@stas.size%></span></a>
                 <ul class="dropdown-menu">
                   <% current_user.places.each do |place| %>
                     <li><h5><%= link_to place.name, place%></h5></li>
@@ -159,7 +159,7 @@
               </ul>
 
             <% if signed_in? %>
-              <li class="dropdown active"><a class="dropdown-toggle" data-toggle="dropdown">Favorite Places <b class="caret"></b></a>
+              <li class="dropdown active"><a class="dropdown-toggle" data-toggle="dropdown">Favorite Places <span class="badge"><%=current_user.places.size%> <b class="caret"></b></span></a>
                 <ul class="dropdown-menu">
                   <% current_user.places.each do |place| %>
                     <li><h5><%= link_to place.name, place%></h5></li>
