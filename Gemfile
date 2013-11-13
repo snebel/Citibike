@@ -6,7 +6,8 @@ gem 'citibike'
 gem 'devise'
 gem 'bootstrap-sass', '2.3.2.0'
 gem 'font-awesome-less'
-
+gem 'pry'
+gem 'pry-debugger'
 #adding this gem screwed up the show/create actions!
 #gem 'protected_attributes'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

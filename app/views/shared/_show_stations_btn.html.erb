@@ -3,6 +3,7 @@
     <h5>Nearby Stations <span class="badge"> <%=@stas.size%> <span class="caret"></span></h5>
   </button>
   <ul class="dropdown-menu" role="menu">
+    <li><h4><small>Wrong list? <%= link_to 'Refresh', '' %></small></h4>
   <% if !@stas.empty? %>
     <% @stas.each do |sta| %>
       <li><a ><h5><%= sta["label"]%></br><h4><small><%= sta.available_bikes %> bikes,  <%= sta.available_docks %> docks</small></h4></a></li>

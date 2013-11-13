@@ -38,6 +38,7 @@
         var lng = position.coords.longitude;
 
         var cookie_val = lat + "|" + lng;
+        
         document.cookie = "lat_lng=" + escape(cookie_val); path = '/places';
         var la;
         setAddress(lat, lng);
@@ -121,6 +122,7 @@
   </head>
 
 <body>
+    <%= flash[:error] %>
   <div class="container">
     <%= render 'shared/header' %>
 
@@ -138,14 +140,6 @@
     <% end %>
     </div>
 
-    <script>
-      function link_address() {
-        if (document.getElementById('address').innerHTML.trim() != "searching...") {
-          document.getElementById('trip_origin').value = document.getElementById('address').innerHTML;
-        }
-      }
-    </script>
-
     <h3><small>Current Location (approximate):
         <a style="cursor:pointer" onclick="link_address();">
           <div id="address" style="display: inline-block">
@@ -156,8 +150,8 @@
 
     <!-- button logic -->
     <div class="bs-example">
-     <!-- default cookies value -->
-     <% if cookies["lat_lng"] == "40.741|-73.9898" %>
+      <!-- default cookies value -->
+      <% if cookies["lat_lng"] == "40.741|-73.9898" %>
           <%= render 'shared/find_stations_btn' %>
 
         <% if signed_in? %>

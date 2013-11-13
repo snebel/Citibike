@@ -26,14 +26,17 @@ class TripsController < ApplicationController
     @lat = @lat_lng.first.to_f
     @lng = @lat_lng.last.to_f
     @stas = Trip.find_closest_stations(@lat, @lng)
+
   end
 
   def create
   	@trip = Trip.new(trip_params)
+
     if @trip.save
       redirect_to @trip
     else
-      render :new
+      flash[:error] = @trip.errors
+      redirect_to root_path
     end
   end
 

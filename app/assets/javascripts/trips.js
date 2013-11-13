@@ -54,4 +54,9 @@ function handleNoGeolocation(error) {
   }
 }
 
+function link_address() {
+  if (document.getElementById('address').innerHTML.trim() != "searching...") {
+    document.getElementById('trip_origin').value = document.getElementById('address').innerHTML;
+  }
+}
 

@@ -1,7 +1,8 @@
 class Trip < ActiveRecord::Base
+  #validates_presence_of :origin
 
   include ActiveModel::Validations
-  validates_with AddressValidator
+  #validates_with AddressValidator
   #need to validate origin and destination as being geocodable
 
   geocoded_by :origin, :latitude  => :origin_lat, 
@@ -10,7 +11,7 @@ class Trip < ActiveRecord::Base
   geocoded_by :destination, :latitude => :destination_lat,
   	:longitude => :destination_long
 
-  after_validation :geocode_all
+  before_save :geocode_all
 
   def geocode_all
   	orig = Geocoder.coordinates(self.origin)
