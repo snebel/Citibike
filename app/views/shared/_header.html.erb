@@ -18,7 +18,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <h1 class="text-primary">CitibikeBetter<small> a useful map for citibikers</small></h1>
+        <a href="/"><h1 class="text-primary">CitibikeBetter</a><small> a useful map for citibikers</small></h1>
       </div>
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -26,7 +26,7 @@
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="/">Home</a></li>
+          <!--<li><a href="/">Home</a></li>-->
           <li>
             <% if signed_in? %>
               <%= link_to "Sign out", destroy_user_session_path, method: "delete" %>
