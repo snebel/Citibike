@@ -54,7 +54,7 @@
             var start = document.cookie.search("lat_lng");
             var end = document.cookie.length;
             var str = document.cookie.slice(start, end);
-            reinitialize(latitude+1, longitude+1); 
+            reinitialize(latitude, longitude); 
           }
           else {
             $("#address").html("Geocoder failed due to: " + status);
@@ -71,11 +71,11 @@
         }; 
 
         map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-
+        /*
         <% unless cookies["lat_lng"] == "40.741|-73.9898" %>
           addMarker(<%=@lat%>, <%=@lng%>, "YOU ARE HERE", true);
         <% end %>  
-
+        */
         new google.maps.BicyclingLayer().setMap(map);
 
         <% get_stations.each do |sta| %>
@@ -99,6 +99,8 @@
         new google.maps.BicyclingLayer().setMap(map);
         */
         map.setCenter(new google.maps.LatLng(latitude, longitude));
+
+        addMarker(latitude, longitude, "YOU ARE HERE", true);
         //add station markers
         <% get_stations.each do |sta| %>
           addMarker(<%= sta["latitude"] %>, <%= sta["longitude"] %>, "Bikes: <%= sta["availableBikes"] %> Docks: <%= sta["availableDocks"] %> <%=sta["label"]%>")
