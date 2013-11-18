@@ -1,5 +1,5 @@
 <div class="btn-group">
-  <button type="button" class="btn btn-primary navbar-btn dropdown-toggle" data-toggle="dropdown">
+  <button type="button" class="btn btn-primary navbar-btn dropdown-toggle" data-toggle="dropdown" onclick="makeList()">
     <h5>Nearby Stations <span class="badge"> <%=@stas.size%> <span class="caret"></span></h5>
   </button>
   <ul class="dropdown-menu" role="menu">
@@ -9,7 +9,8 @@
       <li><a ><h5><%= sta["label"]%></br><h4><small><%= sta.available_bikes %> bikes,  <%= sta.available_docks %> docks</small></h4></a></li>
     <% end %>
   <% else %>
-    <li><h6>No active stations nearby</h6></li>
+    <li><h6>No stations nearby</h6></li>
   <% end %>
   </ul>
 </div>
+

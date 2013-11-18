@@ -28,19 +28,17 @@
     </script>
 
     <script type="text/javascript">
-    //GEOLOCATION
-      var geocoder;
       var latlng;
+      var geocoder;
+      var map;
+      //GEOLOCATION API
       navigator.geolocation.getCurrentPosition(handleGeolocation, handleNoGeolocation);
 
       function handleGeolocation(position) {
         var lat = position.coords.latitude;
         var lng = position.coords.longitude;
-
         var cookie_val = lat + "|" + lng;
-        
         document.cookie = "lat_lng=" + escape(cookie_val); path = '/places';
-        var la;
         setAddress(lat, lng);
       };
 
@@ -53,72 +51,64 @@
             current_address = results[0].formatted_address;
             $("#address").html(current_address);
             
-            //if user has moved locations
-            //var str = document.cookie;
             var start = document.cookie.search("lat_lng");
             var end = document.cookie.length;
             var str = document.cookie.slice(start, end);
-            //alert("\n"+ '<%=cookies["lat_lng"]%>');
-            //alert("str: "+str+", "+"lat_lng=" + latitude + "%7C" + longitude);
-            //unless (str == "lat_lng=" + latitude + "%7C" + longitude || not a new session )
-            //if (str == "lat_lng=" + latitude + "%7C" + longitude)
-              { reinitialize(latitude, longitude); }
+            reinitialize(latitude+1, longitude+1); 
           }
           else {
             $("#address").html("Geocoder failed due to: " + status);
           }
         });
-      }
-    </script>
+      };
 
-    <script type="text/javascript">
+      
       function initialize() {
         var mapOptions = {
           center: new google.maps.LatLng(<%=@lat%>, <%=@lng%>),
           zoom: <%= @zoom %>,
           mapTypeId: google.maps.MapTypeId.ROADMAP
-          }; 
+        }; 
 
         map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-        //mark closest station and current location
         <% unless cookies["lat_lng"] == "40.741|-73.9898" %>
           addMarker(<%=@lat%>, <%=@lng%>, "YOU ARE HERE", true);
         <% end %>  
 
-        var bikeLayer = new google.maps.BicyclingLayer();
-        bikeLayer.setMap(map);
+        new google.maps.BicyclingLayer().setMap(map);
 
-        //add station markers
         <% get_stations.each do |sta| %>
-          addMarker(<%= sta["latitude"] %>, <%= sta["longitude"] %>, "Bikes: <%= sta["availableBikes"] %> Docks: <%= sta["availableDocks"] %> <%=sta["label"]%>")
+          addMarker(<%= sta["latitude"] %>, <%= sta["longitude"] %>, "Bikes: <%= sta["availableBikes"] %> Docks: <%= sta["availableDocks"] %>")
         <% end %> 
       } //end initialize
 
       function reinitialize(latitude, longitude) {
+        /*
         var mapOptions = {
           center: new google.maps.LatLng(latitude, longitude),
           zoom: 16,
           mapTypeId: google.maps.MapTypeId.ROADMAP
-          }; 
-
+        }; 
+        
         map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
         //mark closest station and current location
-          addMarker(latitude, longitude, "YOU ARE HERE", true);
+        addMarker(latitude, longitude, "YOU ARE HERE", true);
 
-        var bikeLayer = new google.maps.BicyclingLayer();
-        bikeLayer.setMap(map);
-
+        new google.maps.BicyclingLayer().setMap(map);
+        */
+        map.setCenter(new google.maps.LatLng(latitude, longitude));
         //add station markers
         <% get_stations.each do |sta| %>
           addMarker(<%= sta["latitude"] %>, <%= sta["longitude"] %>, "Bikes: <%= sta["availableBikes"] %> Docks: <%= sta["availableDocks"] %> <%=sta["label"]%>")
-        <% end %> 
-      } //end reinitialize
+        <% end %>
+
+      }; //end reinitialize
 
       google.maps.event.addDomListener(window,'load',initialize);
-
     </script>
+
   </head>
 
 <body>
@@ -145,56 +135,32 @@
           <div id="address" style="display: inline-block">
             searching...
           </div>
-        </a>
-    </small></h3>
+        </a></small>
+    </h3>
 
     <!-- button logic -->
     <div class="bs-example">
-      <!-- default cookies value -->
       <% if cookies["lat_lng"] == "40.741|-73.9898" %>
           <%= render 'shared/find_stations_btn' %>
-
         <% if signed_in? %>
           <%= render 'shared/show_places_btn' %>
         <% else %>
          <%= render 'shared/get_places_btn' %>
         <% end %>
-
       <% else %>
        <%= render 'shared/show_stations_btn' %>
-
        <% if signed_in? %>
          <%= render 'shared/show_places_btn' %>
         <% else %>
           <%= render 'shared/get_places_btn' %>
         <% end %>
-
       <% end %>
     </div>
-
 
   <div class="panel panel-default">
     <div class="panel-body" id="map-canvas" style="height: 600px"></div>
   </div>
-
-  <nav class="navbar navbar-default " role="navigation">
-    <ul class="nav navbar-nav navbar-left">
-      <li><a style="cursor:pointer" onclick='alert("CitibikeBetter is a map to better help citibikers get around New York." + "\n" + "\n" + 
-
-      "Search for directions the same way you would on Google Maps. You will be shown biking directions from the closest station to your origin with bikes available to the closest station to your destination with open docks." + "\n" + "\n" +
-
-      "The homepage should find your current location automatically. Press Find Staitons to see a dropdown menu of nearby stations, represented on the map by orange markes. Click on a station to see its current bike/dock status." + "\n" + "\n" + 
-
-      "You can also store your favorite places, e.g., Home, to get quick directions to a specific address from your current location.");'>What is this?</a></li>
-      <li><a href="https://github.com/snebel/Citibike" target="blank">Source Code</a></li>
-      <li><a class="text-primary" href="mailto:sam@samnebel.com?Subject=CitibikeBetter" target="_top">Contact</a></li>
-    </ul>
-
-    <div class="navbar navbar-nav navbar-right">
-      <p class="navbar-text">Made in <strong>NYC</strong> by <a href="http://www.samnebel.com" target="blank">Sam Nebel</a></p>
-    </div>
-  </nav>
-
+  <%= render 'shared/footer' %>
   </div>
   </body>
 </html>
