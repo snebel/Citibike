@@ -10,7 +10,6 @@
         text-align: center;
         margin-top: 20px;
       }
-
       #map-canvas { 
         height: 100%;
         margin: 0 auto;
@@ -18,7 +17,6 @@
       #right-navbar-text{ float: right;}
       .panel {
         margin-top: 20px;
-
       }
     </style>
     
@@ -72,31 +70,9 @@
         <% end %> 
       } //end initialize
 
-
-      function reinitialize(latitude, longitude) {
-        /*
-        var mapOptions = {
-          center: new google.maps.LatLng(latitude, longitude),
-          zoom: 16,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        }; 
-        
-        map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-
-        //mark closest station and current location
-        addMarker(latitude, longitude, "YOU ARE HERE", true);
-
-        new google.maps.BicyclingLayer().setMap(map);
-        */
-        //map.setCenter(new google.maps.LatLng(latitude, longitude));
-
-        //addMarker(latitude, longitude, "YOU ARE HERE", true);
-
-      }; //end reinitialize
-
       google.maps.event.addDomListener(window,'load',initialize);
-    </script>
 
+    </script>
   </head>
 
 <body>
