@@ -1,5 +1,6 @@
 class TripsController < ApplicationController
   #before_action :set_cookie, only: :new
+  SOME_SIGNIFICANT_LAT_LONG = "40.741|-73.9898"
 
   def set_location
     redirect_to new_trip_path unless cookies['lat_lng'].nil?
@@ -14,12 +15,10 @@ class TripsController < ApplicationController
 
   def new
     @trip = Trip.new
-    cookies["lat_lng"] ||= "40.741|-73.9898"
-    if cookies["lat_lng"] == "40.741|-73.9898"
-      @zoom = 14
-    else
-      @zoom = 16
-    end
+    # What is the significance of 40.741|73.9898? Whatever it is,
+    # make a method out of it and get the hard-coded numbers out of the way
+    # like so
+    set_zoom_based_on_lat_lng
     #cookies["lat_lng"] = "40.7402686|-73.9895703"
     #used for marking current location and closest station
 	  @lat_lng = cookies["lat_lng"].split("|")
@@ -29,6 +28,8 @@ class TripsController < ApplicationController
 
   end
 
+  # #create, #show, and #update methods are all well-done: small methods 
+  # expressing the intent of the function.
   def create
   	@trip = Trip.new(trip_params)
 
@@ -63,6 +64,15 @@ class TripsController < ApplicationController
 private
   def trip_params
   	params.require('trip').permit(:origin, :destination)
+  end
+
+  def set_zoom_based_on_lat_lng
+    cookies["lat_lng"] ||= SOME_SIGNIFICANT_LAT_LONG
+    if cookies["lat_lng"] == SOME_SIGNIFICANT_LAT_LONG
+      @zoom = 14
+    else
+      @zoom = 16
+    end
   end
 
 end

@@ -1,4 +1,4 @@
-
+# I know you can get this working! 
 class AddressValidator < ActiveModel::Validator
   def validate(record)
 

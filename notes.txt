@@ -1,0 +1,8 @@
+- Your route validation is in place so we don't get exceptions on crazy routes. Great! However, it's very easy to get a "Citibike is not a good choice for this route" error, even when it _would_ be a decent choice. Example: From "empire state building" To "port authority"
+
+- This is a great app - one of the best in the class. You made _great_ use of external APIs, the look and feel of the app is excellent, and sign-up is easy and functional. This is a promising start to a career in software!
+
+- Use your db/seeds.rb file! This will help you get up and running faster in development.
+
+- The biggest thing to work on next is cleaning up your views. You started down the right path with your trips.js file sitting in app/assets/javascripts/. Now it's time to move the rest of the js and css out of your html.erb files. You should really never need to rewrite the <head> elements of your html in your resource views. That's what application.html.erb is for. Use this file to remove duplication, and gain a good understanding of the rails asset pipeline. It will help you immensely down the road!
+http://guides.rubyonrails.org/asset_pipeline.html
