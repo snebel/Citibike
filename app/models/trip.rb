@@ -2,7 +2,7 @@ class Trip < ActiveRecord::Base
   #validates_presence_of :origin
 
   include ActiveModel::Validations
-  #validates_with AddressValidator
+  validates_with AddressValidator
   #need to validate origin and destination as being geocodable
 
   geocoded_by :origin, :latitude  => :origin_lat, 
