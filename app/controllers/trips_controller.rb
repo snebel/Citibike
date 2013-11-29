@@ -20,13 +20,10 @@ class TripsController < ApplicationController
     else
       @zoom = 16
     end
-    #cookies["lat_lng"] = "40.7402686|-73.9895703"
-    #used for marking current location and closest station
 	  @lat_lng = cookies["lat_lng"].split("|")
     @lat = @lat_lng.first.to_f
     @lng = @lat_lng.last.to_f
-    @stas = Trip.find_closest_stations(@lat, @lng)
-
+    #@stas = Trip.find_closest_stations(@lat, @lng)
   end
 
   def create

@@ -20,25 +20,12 @@ class Trip < ActiveRecord::Base
     self.origin_long = orig.last
     self.destination_lat = dest.first
     self.destination_long = dest.last
-
-    #orig_sta = Trip.closest_station_coords(origin_lat, origin_long)
-    #self.origin_closest_station_lat = orig_sta["latitude"]#orig_sta.first
-    #self.origin_closest_station_long = orig_sta["longitude"]#orig_sta.last
-
-    #dest_sta = Trip.closest_station_coords(destination_lat, destination_long)
-    #self.dest_closest_station_lat = dest_sta["latitude"]#dest_sta.first
-    #self.dest_closest_station_long = dest_sta["longitude"]#dest_sta.last
   end
 
-  #returns a station object!
-  #make this return an array of stations sorted by distance from lat, long
+  # returns array of Stations sorted by distance from lat, long
   def self.find_closest_stations(lat, long)
-    #array of Stations
   	nearbys = Citibike.stations.all_within(lat, long, 0.3)
-  	#if nearbys.empty?
-    #HANDLE THIS IN VALIDATOR
-  	#sta = closest_station_id(nearbys, lat, long)
-    dists = {} #ids as keys(fixnum), distances as vals(float)
+    dists = {}
     nearbys.each do |sta|
       dists[sta.id] = sta.distance_from(lat, long)
   	end

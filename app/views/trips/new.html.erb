@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <style type="text/css">
       html { height: 100% }
       body { 
@@ -19,12 +20,8 @@
         margin-top: 20px;
       }
     </style>
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUxuJVuvsR7Fy6J5ZBThZ4zAX79mrFGbI&amp;sensor=true&amp;">
     </script>
-
     <script type="text/javascript">
       //GEOLOCATION API
       navigator.geolocation.getCurrentPosition(handleGeolocation, handleNoGeolocation);
@@ -37,6 +34,11 @@
         setAddress(lat, lng);
         map.setCenter(new google.maps.LatLng(lat, lng));
         addMarker(lat, lng, "YOU ARE HERE", true);
+
+        <% lat_lng = cookies["lat_lng"].split("|") %>
+        <% lat = lat_lng.first.to_f %>
+        <% lng = lat_lng.last.to_f %>
+        <% stas = Trip.find_closest_stations(lat, lng) %>
       };
 
       function setAddress(latitude, longitude) {
@@ -48,18 +50,18 @@
             current_address = results[0].formatted_address;
             $("#address").html(current_address); 
           }
-          else {
-            $("#address").html("Geocoder failed due to: " + status);
-          }
+          else
+            { $("#address").html("Geocoder failed due to: " + status); }
         });
       };
       
       function initialize() {
         var mapOptions = {
           center: new google.maps.LatLng(<%=@lat%>, <%=@lng%>),
+          //center: new google.maps.LatLng(40.741, -73.9898),
           zoom: <%= @zoom %>,
           mapTypeId: google.maps.MapTypeId.ROADMAP
-        }; 
+        };
 
         map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
@@ -67,19 +69,24 @@
 
         <% get_stations.each do |sta| %>
           addMarker(<%= sta["latitude"] %>, <%= sta["longitude"] %>, "Bikes: <%= sta["availableBikes"] %> Docks: <%= sta["availableDocks"] %>")
-        <% end %> 
+        <% end %>
       } //end initialize
 
-      google.maps.event.addDomListener(window,'load',initialize);
+      google.maps.event.addDomListener(window, 'load', initialize);
 
     </script>
   </head>
 
 <body>
-    <%= flash[:error] %>
+    <% lat_lng = cookies["lat_lng"].split("|") %>
+    <% lat = lat_lng.first.to_f %>
+    <% lng = lat_lng.last.to_f %>
+    
+    
   <div class="container">
     <%= render 'shared/header' %>
 
+    <%= flash[:error] %>
     <div class="navbar-form">
     <%= form_for @trip, html: {class: "form-inline", name: "trip_search"} do |f| %>
       <div class="form-group has-info">
@@ -112,7 +119,22 @@
          <%= render 'shared/get_places_btn' %>
         <% end %>
       <% else %>
-       <%= render 'shared/show_stations_btn' %>
+
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary navbar-btn dropdown-toggle" data-toggle="dropdown">
+          <h5>Nearby Stations <span class="badge"> <%=stas.size%> <span class="caret"></span></h5></button>
+            <ul class="dropdown-menu" role="menu">
+              <li><h4><small>Wrong list? <%= link_to 'Refresh', '' %></small></h4>
+              <% if !stas.empty? %>
+                <% stas.each do |sta| %>
+                  <li><a ><h5><%= sta["label"]%></br><h4><small><%= sta.available_bikes %> bikes,  <%= sta.available_docks %> docks</small></h4></a></li>
+                <% end %>
+              <% else %>
+                <li><h6>No stations nearby</h6></li>
+              <% end %>
+            </ul>
+        </div>
+
        <% if signed_in? %>
          <%= render 'shared/show_places_btn' %>
         <% else %>

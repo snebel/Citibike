@@ -2,7 +2,6 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <style type="text/css">
       html { height: 100% }
       body { 
@@ -15,13 +14,9 @@
         height: 100%;
         margin: 0 auto;
       }
-
     </style>
-
-    <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUxuJVuvsR7Fy6J5ZBThZ4zAX79mrFGbI&sensor=true">
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUxuJVuvsR7Fy6J5ZBThZ4zAX79mrFGbI&sensor=true">
     </script>
-
     <script type="text/javascript">
       var directionsService = new google.maps.DirectionsService();
 
@@ -52,67 +47,61 @@
 
   <body>
     <div class="container">
-  	<header>
-  	  <%= render 'shared/header' %>
-  	</header>
+    	<header>
+    	  <%= render 'shared/header' %>
+    	</header>
   
-    <% if @orig_sta == nil || @dest_sta == nil %>
-    <!-- IF  -->
-      <div class="alert alert-danger">
-        <p class="text-left"><strong>Citibike is not a good choice for this route.</strong> Try searching again</p>
-      </div>
-
-
-    <% else %>
-    <!-- ELSE -->
-
-    <div class="row">
-      <div class="col-sm-8 col-sm-offset-2">
-      <div class="panel panel-primary">
-        <div class="panel-heading">
-          <h3 class="panel-title"><%= @trip.origin%> <small>to</small> <%=@trip.destination%></h3>
+      <% if @orig_sta == nil || @dest_sta == nil %>
+        <div class="alert alert-danger">
+          <p class="text-left"><strong>Citibike is not a good choice for this route.</strong> Try searching again</p>
         </div>
-        <table class="table table-hover">
-          <tr class="">
-            <td>Closest Bike (A)</td>
-            <!--<td>Closest Bike:</td>-->
-            <td><p class="text-success"><strong><%= @orig_sta["label"] %></strong></p></td>
-            <td><%= @orig_sta.available_bikes %> bikes available</td>
-          </tr>
-          <tr class="">
-            <td>Closest Dock (B)</td>
-            <!--<td>Closest Dock:</td>-->
-            <td><p class="text-danger"><strong><%=@dest_sta["label"]%></strong></p></td>
-            <td><%= @dest_sta.available_docks %> docks available</td>
-          </tr>
-        </table>
-      </div>
-      </div>
-    </div>
- 
-    <% end %>
-    <!-- END IF ELSE -->
-
-    <div class="panel panel-default">
-  	  <div class="panel-body" id="map-canvas" style="height: 600px"/></div>
-    </div>
-
-    <h3><small>Not the trip you wanted? Try searching again</small></h3>
-
-    <div class="navbar-form">
-      <%= form_for @trip, html: {class: "form-inline"} do |f| %>
-      <div class="form-group">
-        <%= f.label :origin, class: "sr-only" %>
-        <%= f.text_field :origin, class: "form-control", placeholder: "Origin" %>
-      </div>
-      <div class="form-group">
-        <%= f.label :destination, class: "sr-only" %> 
-        <%= f.text_field :destination, class: "form-control", placeholder: "Destination" %>
-      </div>
-        <%= f.submit "Adjust Trip", class: "btn btn-info" %>
+      <% else %>
+        <div class="row">
+          <div class="col-sm-8 col-sm-offset-2">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title"><%= @trip.origin%> <small>to</small> <%=@trip.destination%></h3>
+            </div>
+            <table class="table table-hover">
+              <tr class="">
+                <td>Closest Bike (A)</td>
+                <!--<td>Closest Bike:</td>-->
+                <td><p class="text-success"><strong><%= @orig_sta["label"] %></strong></p></td>
+                <td><%= @orig_sta.available_bikes %> bikes available</td>
+              </tr>
+              <tr class="">
+                <td>Closest Dock (B)</td>
+                <!--<td>Closest Dock:</td>-->
+                <td><p class="text-danger"><strong><%=@dest_sta["label"]%></strong></p></td>
+                <td><%= @dest_sta.available_docks %> docks available</td>
+              </tr>
+            </table>
+          </div>
+          </div>
+        </div>
       <% end %>
+      <!-- END TABLE -->
+
+      <div class="panel panel-default">
+    	  <div class="panel-body" id="map-canvas" style="height: 600px"/></div>
+      </div>
+
+      <h3><small>Not the trip you wanted? Try searching again</small></h3>
+
+      <div class="navbar-form">
+        <%= form_for @trip, html: {class: "form-inline"} do |f| %>
+        <div class="form-group">
+          <%= f.label :origin, class: "sr-only" %>
+          <%= f.text_field :origin, class: "form-control", placeholder: "Origin" %>
+        </div>
+        <div class="form-group">
+          <%= f.label :destination, class: "sr-only" %> 
+          <%= f.text_field :destination, class: "form-control", placeholder: "Destination" %>
+        </div>
+          <%= f.submit "Adjust Trip", class: "btn btn-info" %>
+        <% end %>
+      </div>
+      <p>-</p>
     </div>
-    <p>-</p>
-  </div>
   </body>
 </html>
