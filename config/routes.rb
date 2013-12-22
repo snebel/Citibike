@@ -3,6 +3,7 @@ Citibike::Application.routes.draw do
   resources :trips
   resources :places
   root 'trips#new'
+  #match '/googlec6b18f5ae6894657.html',    to: 'trips/googlec6b18f5ae6894657', via: 'get'
   #root 'trips#set_location'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

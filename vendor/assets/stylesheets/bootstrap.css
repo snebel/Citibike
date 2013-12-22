@@ -7100,3 +7100,22 @@ td.visible-print {
     margin-bottom: 25px;
   }
 }
+
+/* Code Moved from Views */
+html { 
+  height: 100%; 
+}
+body { 
+  height: 100%; 
+  margin: 0; 
+  text-align: center;
+  margin-top: 20px;
+}
+#map-canvas { 
+  height: 100%;
+  margin: 0 auto;
+}
+#right-navbar-text{ float: right;}
+.panel {
+  margin-top: 20px;
+}

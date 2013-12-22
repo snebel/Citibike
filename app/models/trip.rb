@@ -1,9 +1,15 @@
+=begin
+There are too many comments in this class! (I know, I'm adding more, which is suboptimal.)
+
+I know you struggled with the geocode_all and find_closest_stations / validation methods.
+However, commented out code looks messy and won't help you. Trust git! Create a branch with
+an alternate way of writing these methods and get it out of master.
+=end
 class Trip < ActiveRecord::Base
   #validates_presence_of :origin
 
   include ActiveModel::Validations
   validates_with AddressValidator
-  #need to validate origin and destination as being geocodable
 
   geocoded_by :origin, :latitude  => :origin_lat, 
   	:longitude => :origin_long

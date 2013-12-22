@@ -32,12 +32,5 @@ module ApplicationHelper
     min = dists.values.min
     id = dists.key(min)
     Citibike.stations.find_by_id(id)
-
-    #if sta["availableBikes"] < 14 #or docks == 0
-    #  nearbys.delete(sta)
-    #  closest_station_id(nearbys, lat, long)
-    #else
-    #  return sta
-    #end
   end
 end

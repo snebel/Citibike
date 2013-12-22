@@ -2,19 +2,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style type="text/css">
-      html { height: 100% }
-      body { 
-        height: 100%; 
-        margin: 0; 
-        text-align: center;
-        margin-top: 20px;
-      }
-      #map-canvas { 
-        height: 100%;
-        margin: 0 auto;
-      }
-    </style>
+
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUxuJVuvsR7Fy6J5ZBThZ4zAX79mrFGbI&sensor=true">
     </script>
     <script type="text/javascript">
@@ -26,13 +14,27 @@
         map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
         directionsDisplay.setMap(map);
-        directionsDisplay.setPanel(document.getElementById("directions"));
 
         <% unless @orig_sta == nil || @dest_sta == nil %>
           addMarker(<%=@trip.origin_lat%>, <%=@trip.origin_long%>, "<%= @trip.origin %>", true);
           addMarker(<%=@trip.destination_lat%>, <%=@trip.destination_long%>, "<%= @trip.destination %>", true)
         <% end %>
       } //end initialize
+
+      /* show places initialize function
+      function initialize() {
+        directionsDisplay = new google.maps.DirectionsRenderer();
+
+        map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
+        directionsDisplay.setMap(map);
+
+        <% unless @o_sta == nil || @d_sta == nil %>
+          addMarker(<%= @lat %>, <%= @lng %>, "You are here", true);
+          addMarker(<%=@place.lat%>, <%=@place.lng%>, "<%=@place.address%>", true);
+        <% end %>
+      } //end initialize
+      */
 
       google.maps.event.addDomListener(window,'load',initialize);
 

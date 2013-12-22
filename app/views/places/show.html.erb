@@ -1,22 +1,10 @@
-
+<!--
+You have a well-written controller and model for your places resource. Here things go off the rails a bit. You know where to put javascripts, and you do it correctly with your trips.js file. I'm guessing you tried shoving everything - head html, javascripts - into this and other files because you were trying to debug something tricky. I understand this, but there are better ways. The Google Developer tools in Chrome are the best place to start. In general, putting everything together in one file is only going to help you debug the most esoteric issues. If you're working in rails, trust the Rails asset pipeline is serving your assets as you specified and work on isolating the issue.
+-->
 <!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <style type="text/css">
-      html { height: 100% }
-      body { 
-        height: 100%; 
-        margin: 0; 
-        text-align: center;
-        margin-top: 20px;
-      }
-      #map-canvas { 
-        height: 100%;
-        margin: 0 auto;
-      }
-    </style>
 
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUxuJVuvsR7Fy6J5ZBThZ4zAX79mrFGbI&sensor=true">
@@ -28,17 +16,9 @@
       function initialize() {
         directionsDisplay = new google.maps.DirectionsRenderer();
 
-        var mapOptions = {
-          center: new google.maps.LatLng(<%=@place.lat%>, <%=@place.lng%>),
-          zoom: 16,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-          }; 
-
         map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
         directionsDisplay.setMap(map);
-        //directionsDisplay.setPanel(document.getElementById("directions"));
-        //alert('<%=@orig%>' + "\n"+"\n"+ '<%=cookies["lat_lng"]%>');
 
         <% unless @o_sta == nil || @d_sta == nil %>
           addMarker(<%= @lat %>, <%= @lng %>, "You are here", true);
@@ -114,7 +94,6 @@
       <% end %>
     </div>
     <p>-</p>
-    <!--<div id="directions" style="float:left;width:30%;height:100%"></div>-->
   </div>
   </body>
 </html>
