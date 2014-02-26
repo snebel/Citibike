@@ -1,99 +1,90 @@
 <!--
 You have a well-written controller and model for your places resource. Here things go off the rails a bit. You know where to put javascripts, and you do it correctly with your trips.js file. I'm guessing you tried shoving everything - head html, javascripts - into this and other files because you were trying to debug something tricky. I understand this, but there are better ways. The Google Developer tools in Chrome are the best place to start. In general, putting everything together in one file is only going to help you debug the most esoteric issues. If you're working in rails, trust the Rails asset pipeline is serving your assets as you specified and work on isolating the issue.
 -->
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUxuJVuvsR7Fy6J5ZBThZ4zAX79mrFGbI&sensor=true">
-    </script>
+  <script type="text/javascript">
+    var directionsService = new google.maps.DirectionsService();
 
-    <script type="text/javascript">
-      var directionsService = new google.maps.DirectionsService();
+    function initialize() {
+      directionsDisplay = new google.maps.DirectionsRenderer();
 
-      function initialize() {
-        directionsDisplay = new google.maps.DirectionsRenderer();
+      map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-        map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+      directionsDisplay.setMap(map);
 
-        directionsDisplay.setMap(map);
-
-        <% unless @o_sta == nil || @d_sta == nil %>
-          addMarker(<%= @lat %>, <%= @lng %>, "You are here", true);
-          addMarker(<%=@place.lat%>, <%=@place.lng%>, "<%=@place.address%>", true);
-        <% end %>
-      } //end initialize
-      
-      google.maps.event.addDomListener(window,'load',initialize);
-
-      <% if @o_sta != nil && @d_sta != nil %>
-        calcRoute("<%= "#{@o_sta.lat}, #{@o_sta.long}" %>", "<%= "#{@d_sta.lat}, #{@d_sta.long}" %>");
-      <% else %>
-        calcRoute("<%= "#{@lat}, #{@lng}" %>", "<%= @place.address %>");
+      <% unless @o_sta == nil || @d_sta == nil %>
+        addMarker(<%= @lat %>, <%= @lng %>, "You are here", true);
+        addMarker(<%=@place.lat%>, <%=@place.lng%>, "<%=@place.address%>", true);
       <% end %>
+    } //end initialize
+    
+    google.maps.event.addDomListener(window,'load',initialize);
 
-    </script>
-
-  </head>
-  <body>
-    <div class="container">
-  	<header>
-  	  <%= render 'shared/header' %>
-  	</header>
-
-  
-    <% if @o_sta == nil || @d_sta == nil %>
-      <div class="alert alert-danger">
-        <p class="text-left"><strong>Citibike is not</strong> a good way to get from <strong>(A)</strong> your current location to <strong>(B)</strong> <%= @place.name %>. Edit or delete this place below.</p>
-      </div>
+    <% if @o_sta != nil && @d_sta != nil %>
+      calcRoute("<%= "#{@o_sta.lat}, #{@o_sta.long}" %>", "<%= "#{@d_sta.lat}, #{@d_sta.long}" %>");
     <% else %>
-
-      <div class="row">
-        <div class="col-sm-8 col-sm-offset-2">
-          <div class="panel panel-primary">
-            <div class="panel-heading">
-              <h4>Current Location <small>to</small> <%=@place.name%></h4>
-            </div>
-            <table class="table table-hover">
-              <tr>
-                <td>Closest Bike (A)</td>
-                <td><b class="text-success"><%= @o_sta["label"] %></b></td>
-                <td><%= @o_sta["availableBikes"] %> bikes available</td>
-              </tr>
-              <tr>
-                <td>Closest Dock (B)</td>
-                <td><b class="text-danger"><%= @d_sta["label"] %></b></td>
-                <td><%= @d_sta["availableDocks"] %> docks available</td>
-              </tr>
-            </table>
-          </div>
-        </div>
-      </div>
+      calcRoute("<%= "#{@lat}, #{@lng}" %>", "<%= @place.address %>");
     <% end %>
 
-  	
-    <div class="panel panel-default">
-      <div class="panel-body" id="map-canvas" style="height: 600px"/></div>
-    </div>
+  </script>
 
-    <h3><small>Not the place you wanted? Edit or delete it from your favorites</small></h3>
-    <div class="navbar-form">
-      <%= form_for @place, html: {class: "form-inline"} do |f| %>
-        <div class="form-group has-warning">
-          <%= f.label :name, class: "sr-only" %>
-          <%= f.text_field :name, class: "form-control", placeholder: "New Name" %>
-        </div>
-        <div class="form-group has-warning">
-          <%= f.label :address, class: "sr-only" %>
-          <%= f.text_field :address, class: "form-control", placeholder: "New Address" %>
-        </div>
-          <%= f.submit "Update Place", class: "btn btn-warning" %>
-          <%= f.submit "Delete", class: "btn btn-danger" %>
-      <% end %>
+</head>
+<body>
+  <div class="container">
+	<header>
+	  <%= render 'shared/header' %>
+	</header>
+
+
+  <% if @o_sta == nil || @d_sta == nil %>
+    <div class="alert alert-danger">
+      <p class="text-left"><strong>Citibike is not</strong> a good way to get from <strong>(A)</strong> your current location to <strong>(B)</strong> <%= @place.name %>. Edit or delete this place below.</p>
     </div>
-    <p>-</p>
+  <% else %>
+
+    <div class="row">
+      <div class="col-sm-8 col-sm-offset-2">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h4>Current Location <small>to</small> <%=@place.name%></h4>
+          </div>
+          <table class="table table-hover">
+            <tr>
+              <td>Closest Bike (A)</td>
+              <td><b class="text-success"><%= @o_sta["label"] %></b></td>
+              <td><%= @o_sta["availableBikes"] %> bikes available</td>
+            </tr>
+            <tr>
+              <td>Closest Dock (B)</td>
+              <td><b class="text-danger"><%= @d_sta["label"] %></b></td>
+              <td><%= @d_sta["availableDocks"] %> docks available</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+	
+  <div class="panel panel-default">
+    <div class="panel-body" id="map-canvas" style="height: 600px"/></div>
   </div>
-  </body>
-</html>
+
+  <h3><small>Not the place you wanted? Edit or delete it from your favorites</small></h3>
+  <div class="navbar-form">
+    <%= form_for @place, html: {class: "form-inline"} do |f| %>
+      <div class="form-group has-warning">
+        <%= f.label :name, class: "sr-only" %>
+        <%= f.text_field :name, class: "form-control", placeholder: "New Name" %>
+      </div>
+      <div class="form-group has-warning">
+        <%= f.label :address, class: "sr-only" %>
+        <%= f.text_field :address, class: "form-control", placeholder: "New Address" %>
+      </div>
+        <%= f.submit "Update Place", class: "btn btn-warning" %>
+        <%= f.submit "Delete", class: "btn btn-danger" %>
+    <% end %>
+  </div>
+  <p>-</p>
+</div>
+

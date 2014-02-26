@@ -1,77 +1,67 @@
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="google-site-verification" content="kOIaVSc3lcTCuWTh-L3QZzfphzvKJsdacpM83UCTRkA"/>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUxuJVuvsR7Fy6J5ZBThZ4zAX79mrFGbI&amp;sensor=true&amp;">
-    </script>
-    <script type="text/javascript">
-      //GEOLOCATION API
-      navigator.geolocation.getCurrentPosition(handleGeolocation, handleNoGeolocation);
+<script type="text/javascript">
+  //GEOLOCATION API
+  navigator.geolocation.getCurrentPosition(handleGeolocation, handleNoGeolocation);
 
-      function handleGeolocation(position) {
-        var lat = position.coords.latitude;
-        var lng = position.coords.longitude;
-        var cookie_val = lat + "|" + lng;
-        document.cookie = "lat_lng=" + escape(cookie_val); path = '/places';
-        setAddress(lat, lng);
-        map.setCenter(new google.maps.LatLng(lat, lng));
-        addMarker(lat, lng, "YOU ARE HERE", true);
+  function handleGeolocation(position) {
+    var lat = position.coords.latitude;
+    var lng = position.coords.longitude;
+    var cookie_val = lat + "|" + lng;
+    document.cookie = "lat_lng=" + escape(cookie_val); path = '/places';
+    setAddress(lat, lng);
+    map.setCenter(new google.maps.LatLng(lat, lng));
+    addMarker(lat, lng, "YOU ARE HERE", true);
 
-        <% lat_lng = cookies["lat_lng"].split("|") %>
-        <% lat = lat_lng.first.to_f %>
-        <% lng = lat_lng.last.to_f %>
-        <% stas = Trip.find_closest_stations(lat, lng) %>
-      };
-
-      function setAddress(latitude, longitude) {
-        geocoder = new google.maps.Geocoder();
-        latlng = new google.maps.LatLng(latitude, longitude);
-
-        result = geocoder.geocode({'latLng': latlng}, function(results, status) {
-          if (status == google.maps.GeocoderStatus.OK) {
-            current_address = results[0].formatted_address;
-            $("#address").html(current_address); 
-          }
-          else
-            { $("#address").html("Geocoder failed due to: " + status); }
-        });
-      };
-      
-      function initialize() {
-        var mapOptions = {
-          center: new google.maps.LatLng(<%=@lat%>, <%=@lng%>),
-          //center: new google.maps.LatLng(40.741, -73.9898),
-          zoom: <%= @zoom %>,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-
-        map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-
-        new google.maps.BicyclingLayer().setMap(map);
-
-        <% get_stations.each do |sta| %>
-          addMarker(<%= sta["latitude"] %>, <%= sta["longitude"] %>, "Bikes: <%= sta["availableBikes"] %> Docks: <%= sta["availableDocks"] %>")
-        <% end %>
-      } //end initialize
-
-      google.maps.event.addDomListener(window, 'load', initialize);
-
-    </script>
-  </head>
-
-<body>
     <% lat_lng = cookies["lat_lng"].split("|") %>
     <% lat = lat_lng.first.to_f %>
     <% lng = lat_lng.last.to_f %>
-    
-    
-  <div class="container">
-    <%= render 'shared/header' %>
+    <% stas = Trip.find_closest_stations(lat, lng) %>
+  };
 
-    <%= flash[:error] %>
-    <div class="navbar-form">
+  function setAddress(latitude, longitude) {
+    geocoder = new google.maps.Geocoder();
+    latlng = new google.maps.LatLng(latitude, longitude);
+
+    result = geocoder.geocode({'latLng': latlng}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        current_address = results[0].formatted_address;
+        $("#address").html(current_address); 
+      }
+      else
+        { $("#address").html("Geocoder failed due to: " + status); }
+    });
+  };
+  
+  function initialize() {
+    var mapOptions = {
+      center: new google.maps.LatLng(<%=@lat%>, <%=@lng%>),
+      //center: new google.maps.LatLng(40.741, -73.9898),
+      zoom: <%= @zoom %>,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
+    new google.maps.BicyclingLayer().setMap(map);
+
+    <% get_stations.each do |sta| %>
+      addMarker(<%= sta["latitude"] %>, <%= sta["longitude"] %>, "Bikes: <%= sta["availableBikes"] %> Docks: <%= sta["availableDocks"] %>")
+    <% end %>
+  } //end initialize
+
+  google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+
+  <% lat_lng = cookies["lat_lng"].split("|") %>
+  <% lat = lat_lng.first.to_f %>
+  <% lng = lat_lng.last.to_f %>
+    
+    
+<div class="container">
+  <%= render 'shared/header' %>
+
+  <%= flash[:error] %>
+  <div class="navbar-form">
     <%= form_for @trip, html: {class: "form-inline", name: "trip_search"} do |f| %>
       <div class="form-group has-info">
         <%= f.label :origin, class: "sr-only" %>
@@ -83,54 +73,53 @@
       </div>
       <%= f.submit "Find Station Directions", class: "btn btn-info " %>
     <% end %>
-    </div>
+  </div>
 
-    <h3><small>Current Location (approximate):
-        <a style="cursor:pointer" onclick="link_address();">
-          <div id="address" style="display: inline-block">
-            searching...
-          </div>
-        </a></small>
-    </h3>
+  <h3><small>Current Location (approximate):
+    <a style="cursor:pointer" onclick="link_address();">
+      <div id="address" style="display: inline-block">
+        searching...
+      </div>
+    </a></small>
+  </h3>
 
-    <!-- button logic -->
-    <div class="bs-example">
-      <% if cookies["lat_lng"] == "40.741|-73.9898" %>
-          <%= render 'shared/find_stations_btn' %>
-        <% if signed_in? %>
-          <%= render 'shared/show_places_btn' %>
-        <% else %>
-         <%= render 'shared/get_places_btn' %>
-        <% end %>
+  <!-- button logic -->
+  <div class="bs-example">
+    <% if cookies["lat_lng"] == "40.741|-73.9898" %>
+        <%= render 'shared/find_stations_btn' %>
+      <% if signed_in? %>
+        <%= render 'shared/show_places_btn' %>
       <% else %>
-
-        <div class="btn-group">
-          <button type="button" class="btn btn-primary navbar-btn dropdown-toggle" data-toggle="dropdown">
-          <h5>Nearby Stations <span class="badge"> <%=stas.size%> <span class="caret"></span></h5></button>
-            <ul class="dropdown-menu" role="menu">
-              <li><h4><small>Wrong list? <%= link_to 'Refresh', '' %></small></h4>
-              <% if !stas.empty? %>
-                <% stas.each do |sta| %>
-                  <li><a ><h5><%= sta["label"]%></br><h4><small><%= sta.available_bikes %> bikes,  <%= sta.available_docks %> docks</small></h4></a></li>
-                <% end %>
-              <% else %>
-                <li><h6>No stations nearby</h6></li>
-              <% end %>
-            </ul>
-        </div>
-
-       <% if signed_in? %>
-         <%= render 'shared/show_places_btn' %>
-        <% else %>
-          <%= render 'shared/get_places_btn' %>
-        <% end %>
+       <%= render 'shared/get_places_btn' %>
       <% end %>
-    </div>
+    <% else %>
+
+      <div class="btn-group">
+        <button type="button" class="btn btn-primary navbar-btn dropdown-toggle" data-toggle="dropdown">
+        <h5>Nearby Stations <span class="badge"> <%=stas.size%> <span class="caret"></span></h5></button>
+          <ul class="dropdown-menu" role="menu">
+            <li><h4><small>Wrong list? <%= link_to 'Refresh', '' %></small></h4>
+            <% if !stas.empty? %>
+              <% stas.each do |sta| %>
+                <li><a ><h5><%= sta["label"]%></br><h4><small><%= sta.available_bikes %> bikes,  <%= sta.available_docks %> docks</small></h4></a></li>
+              <% end %>
+            <% else %>
+              <li><h6>No stations nearby</h6></li>
+            <% end %>
+          </ul>
+      </div>
+
+     <% if signed_in? %>
+       <%= render 'shared/show_places_btn' %>
+      <% else %>
+        <%= render 'shared/get_places_btn' %>
+      <% end %>
+    <% end %>
+  </div>
 
   <div class="panel panel-default">
     <div class="panel-body" id="map-canvas" style="height: 600px"></div>
   </div>
+  
   <%= render 'shared/footer' %>
-  </div>
-  </body>
-</html>
+</div>

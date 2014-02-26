@@ -1,109 +1,101 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUxuJVuvsR7Fy6J5ZBThZ4zAX79mrFGbI&sensor=true">
-    </script>
-    <script type="text/javascript">
-      var directionsService = new google.maps.DirectionsService();
+  <script type="text/javascript">
+    var directionsService = new google.maps.DirectionsService();
 
-      function initialize() {
-        directionsDisplay = new google.maps.DirectionsRenderer();
+    function initialize() {
+      directionsDisplay = new google.maps.DirectionsRenderer();
 
-        map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+      map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-        directionsDisplay.setMap(map);
+      directionsDisplay.setMap(map);
 
-        <% unless @orig_sta == nil || @dest_sta == nil %>
-          addMarker(<%=@trip.origin_lat%>, <%=@trip.origin_long%>, "<%= @trip.origin %>", true);
-          addMarker(<%=@trip.destination_lat%>, <%=@trip.destination_long%>, "<%= @trip.destination %>", true)
-        <% end %>
-      } //end initialize
-
-      /* show places initialize function
-      function initialize() {
-        directionsDisplay = new google.maps.DirectionsRenderer();
-
-        map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-
-        directionsDisplay.setMap(map);
-
-        <% unless @o_sta == nil || @d_sta == nil %>
-          addMarker(<%= @lat %>, <%= @lng %>, "You are here", true);
-          addMarker(<%=@place.lat%>, <%=@place.lng%>, "<%=@place.address%>", true);
-        <% end %>
-      } //end initialize
-      */
-
-      google.maps.event.addDomListener(window,'load',initialize);
-
-      //show station-station directions
-      <% if @orig_sta != nil && @dest_sta != nil %>
-        calcRoute("<%= "#{@orig_sta.lat}, #{@orig_sta.long}" %>", "<%= "#{@dest_sta.lat}, #{@dest_sta.long}" %>");
-      <% else %>
-        calcRoute("<%= @trip.origin %>", "<%= @trip.destination %>");
+      <% unless @orig_sta == nil || @dest_sta == nil %>
+        addMarker(<%=@trip.origin_lat%>, <%=@trip.origin_long%>, "<%= @trip.origin %>", true);
+        addMarker(<%=@trip.destination_lat%>, <%=@trip.destination_long%>, "<%= @trip.destination %>", true)
       <% end %>
-    </script>
-  </head>
+    } //end initialize
 
-  <body>
-    <div class="container">
-    	<header>
-    	  <%= render 'shared/header' %>
-    	</header>
-  
-      <% if @orig_sta == nil || @dest_sta == nil %>
-        <div class="alert alert-danger">
-          <p class="text-left"><strong>Citibike is not a good choice for this route.</strong> Try searching again</p>
-        </div>
-      <% else %>
-        <div class="row">
-          <div class="col-sm-8 col-sm-offset-2">
-          <div class="panel panel-primary">
-            <div class="panel-heading">
-              <h3 class="panel-title"><%= @trip.origin%> <small>to</small> <%=@trip.destination%></h3>
-            </div>
-            <table class="table table-hover">
-              <tr class="">
-                <td>Closest Bike (A)</td>
-                <!--<td>Closest Bike:</td>-->
-                <td><p class="text-success"><strong><%= @orig_sta["label"] %></strong></p></td>
-                <td><%= @orig_sta.available_bikes %> bikes available</td>
-              </tr>
-              <tr class="">
-                <td>Closest Dock (B)</td>
-                <!--<td>Closest Dock:</td>-->
-                <td><p class="text-danger"><strong><%=@dest_sta["label"]%></strong></p></td>
-                <td><%= @dest_sta.available_docks %> docks available</td>
-              </tr>
-            </table>
-          </div>
-          </div>
-        </div>
+    /* show places initialize function
+    function initialize() {
+      directionsDisplay = new google.maps.DirectionsRenderer();
+
+      map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
+      directionsDisplay.setMap(map);
+
+      <% unless @o_sta == nil || @d_sta == nil %>
+        addMarker(<%= @lat %>, <%= @lng %>, "You are here", true);
+        addMarker(<%=@place.lat%>, <%=@place.lng%>, "<%=@place.address%>", true);
       <% end %>
-      <!-- END TABLE -->
+    } //end initialize
+    */
 
-      <div class="panel panel-default">
-    	  <div class="panel-body" id="map-canvas" style="height: 600px"/></div>
+    google.maps.event.addDomListener(window,'load',initialize);
+
+    //show station-station directions
+    <% if @orig_sta != nil && @dest_sta != nil %>
+      calcRoute("<%= "#{@orig_sta.lat}, #{@orig_sta.long}" %>", "<%= "#{@dest_sta.lat}, #{@dest_sta.long}" %>");
+    <% else %>
+      calcRoute("<%= @trip.origin %>", "<%= @trip.destination %>");
+    <% end %>
+  </script>
+
+
+
+  <div class="container">
+  	<header>
+  	  <%= render 'shared/header' %>
+  	</header>
+
+    <% if @orig_sta == nil || @dest_sta == nil %>
+      <div class="alert alert-danger">
+        <p class="text-left"><strong>Citibike is not a good choice for this route.</strong> Try searching again</p>
       </div>
-
-      <h3><small>Not the trip you wanted? Try searching again</small></h3>
-
-      <div class="navbar-form">
-        <%= form_for @trip, html: {class: "form-inline"} do |f| %>
-        <div class="form-group">
-          <%= f.label :origin, class: "sr-only" %>
-          <%= f.text_field :origin, class: "form-control", placeholder: "Origin" %>
+    <% else %>
+      <div class="row">
+        <div class="col-sm-8 col-sm-offset-2">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title"><%= @trip.origin%> <small>to</small> <%=@trip.destination%></h3>
+          </div>
+          <table class="table table-hover">
+            <tr class="">
+              <td>Closest Bike (A)</td>
+              <!--<td>Closest Bike:</td>-->
+              <td><p class="text-success"><strong><%= @orig_sta["label"] %></strong></p></td>
+              <td><%= @orig_sta.available_bikes %> bikes available</td>
+            </tr>
+            <tr class="">
+              <td>Closest Dock (B)</td>
+              <!--<td>Closest Dock:</td>-->
+              <td><p class="text-danger"><strong><%=@dest_sta["label"]%></strong></p></td>
+              <td><%= @dest_sta.available_docks %> docks available</td>
+            </tr>
+          </table>
         </div>
-        <div class="form-group">
-          <%= f.label :destination, class: "sr-only" %> 
-          <%= f.text_field :destination, class: "form-control", placeholder: "Destination" %>
         </div>
-          <%= f.submit "Adjust Trip", class: "btn btn-info" %>
-        <% end %>
       </div>
-      <p>-</p>
+    <% end %>
+    <!-- END TABLE -->
+
+    <div class="panel panel-default">
+  	  <div class="panel-body" id="map-canvas" style="height: 600px"/></div>
     </div>
-  </body>
-</html>
+
+    <h3><small>Not the trip you wanted? Try searching again</small></h3>
+
+    <div class="navbar-form">
+      <%= form_for @trip, html: {class: "form-inline"} do |f| %>
+      <div class="form-group">
+        <%= f.label :origin, class: "sr-only" %>
+        <%= f.text_field :origin, class: "form-control", placeholder: "Origin" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :destination, class: "sr-only" %> 
+        <%= f.text_field :destination, class: "form-control", placeholder: "Destination" %>
+      </div>
+        <%= f.submit "Adjust Trip", class: "btn btn-info" %>
+      <% end %>
+    </div>
+    <p>-</p>
+  </div>
