@@ -1,4 +1,6 @@
-== README
+#CitibikeBetter
+
+###<http://citibike-better.herokuapp.com>
 
 CitibikeBetter is a map to better help citibikers get around New York.
 
