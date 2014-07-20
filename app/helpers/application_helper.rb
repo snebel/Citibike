@@ -2,7 +2,7 @@ module ApplicationHelper
   #require 'JSON'
 
   def get_stations
-  	url = "https://citibikenyc.com/stations/json"
+  	url = "http://www.citibikenyc.com/stations/json/"
   	resp = Net::HTTP.get_response(URI.parse(url))
   	data = resp.body
   	result = JSON.parse(data)
