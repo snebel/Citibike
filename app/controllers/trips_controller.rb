@@ -51,7 +51,7 @@ class TripsController < ApplicationController
     @orig_stations = Trip.find_closest_stations(
                 @trip.origin_lat, @trip.origin_long)
     @orig_sta = Trip.find_available_bike(@orig_stations)
-
+    
     @dest_stations = Trip.find_closest_stations(
                 @trip.destination_lat, @trip.destination_long)
     @dest_sta = Trip.find_available_dock(@dest_stations)

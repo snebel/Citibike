@@ -1,7 +1,8 @@
 
   <script type="text/javascript">
     var directionsService = new google.maps.DirectionsService();
-
+    var directionsDisplay;
+    var map;
     function initialize() {
       directionsDisplay = new google.maps.DirectionsRenderer();
 
@@ -11,7 +12,9 @@
 
       <% unless @orig_sta == nil || @dest_sta == nil %>
         addMarker(<%=@trip.origin_lat%>, <%=@trip.origin_long%>, "<%= @trip.origin %>", true);
-        addMarker(<%=@trip.destination_lat%>, <%=@trip.destination_long%>, "<%= @trip.destination %>", true)
+        addMarker(<%= @orig_sta.lat %>, <%= @orig_sta.long %>, "(A) <%= @orig_sta["label"] %>", true);
+        addMarker(<%=@trip.destination_lat%>, <%=@trip.destination_long%>, "<%= @trip.destination %>", true);
+        addMarker(<%= @dest_sta.lat %>, <%= @dest_sta.long %>, "(B) <%= @dest_sta["label"] %>", true);
       <% end %>
     } //end initialize
 

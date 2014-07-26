@@ -9,7 +9,7 @@ class Trip < ActiveRecord::Base
   #validates_presence_of :origin
 
   include ActiveModel::Validations
-  validates_with AddressValidator
+  #validates_with AddressValidator
 
   geocoded_by :origin, :latitude  => :origin_lat, 
   	:longitude => :origin_long

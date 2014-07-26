@@ -8,6 +8,8 @@ var mapOptions = {
 //displays directions from orig to dest,
 //entered as strings
 function calcRoute(orig, dest, mode) {
+  var directionsDisplay = new google.maps.DirectionsRenderer();
+  directionsDisplay.setMap(map);
   var request = {
     origin: orig,
     destination: dest,
@@ -23,6 +25,7 @@ function calcRoute(orig, dest, mode) {
 //adds a marker with info window to a map
 //fix this to take icon and window action as params
 function addMarker(lat, lng, status, open) {
+  status.replace(/&amp;/g, '&')
   var marker = new google.maps.Marker({
     position: new google.maps.LatLng(lat, lng),
     map: map
